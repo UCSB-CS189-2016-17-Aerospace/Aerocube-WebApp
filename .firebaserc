@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "yfn-aerospace-staging",
+    "prod": "yfn-aerospace",
+    "staging": "yfn-aerospace-staging"
+  }
+}

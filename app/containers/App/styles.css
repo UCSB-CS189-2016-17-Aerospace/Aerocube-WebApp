@@ -1,0 +1,23 @@
+/**
+ * styles.css
+ *
+ * App container styles
+ */
+
+.container {
+  display: block;
+  height: 100%;
+}
+
+* {
+  font-family: 'Work Sans', Helvetica, sans-serif;
+}
+
+html,
+body,
+body > div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
