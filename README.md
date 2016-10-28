@@ -3,7 +3,7 @@
 ## Getting Started
 
 ### Prerequisites
-1. Install Node 6.x.x (Latest version) and add to path
+1. Install Node 6.x.x (Latest version) and add to path (you may need to reboot for it to take effect, also installing node added it to my path AT)
 2. Install Jetbrains Webstorm
 
 ### Instructions
