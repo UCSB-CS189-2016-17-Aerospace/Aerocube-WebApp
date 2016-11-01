@@ -34,6 +34,15 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      path: 'login',
+      name: 'login',
+      getComponent(nextState, cb) {
+        System.import('containers/Login')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    },
+    {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
