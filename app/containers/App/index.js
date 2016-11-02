@@ -14,7 +14,8 @@
 import React from 'react';
 
 import styles from './styles.css';
-import background from './stardust.png';
+// import background from './stardust.png';
+//           style={{background: `url(${background}) repeat`}}
 
 export default class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -24,9 +25,7 @@ export default class App extends React.Component { // eslint-disable-line react/
 
   render() {
     return (
-      <div className={styles.container}
-           style={{background: `url(${background}) repeat`}}
-      >
+      <div className={styles.container}>
         {React.Children.toArray(this.props.children)}
       </div>
     );
