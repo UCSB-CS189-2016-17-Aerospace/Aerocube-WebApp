@@ -1,0 +1,39 @@
+.uploadForm { /* stylelint-disable */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 10% 0;
+}
+
+.imageSelect,
+.submitButton {
+  margin: 20px;
+}
+
+.submitButton {
+  background-color: whitesmoke;
+  font-size: 2em;
+  font-weight: bold;
+  color: darkslategrey;
+  border-radius: 4px;
+  padding: 1em;
+  line-height: 0;
+}
+
+.submitButton:hover {
+  background-color: lightgrey;
+  color: black;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.previewImage {
+  max-width: 80%;
+  height: auto;
+  box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px darkslategrey;
+}
