@@ -14,7 +14,13 @@
   border-radius: 10px;
   color: darkslategray;
   width: 700px;
-  max-width: 80%;
+  max-width: 90%;
+}
+
+@media (max-width: 767px) {
+  .loginForm {
+    padding: 2em;
+  }
 }
 
 input {
