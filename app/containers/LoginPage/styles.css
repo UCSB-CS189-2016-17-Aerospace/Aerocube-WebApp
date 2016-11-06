@@ -45,6 +45,13 @@ button {
   display: block;
   color: whitesmoke;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+}
+
+button:hover {
+  background-color: darkslategray;
+  transition: all 200ms ease-in-out;
 }
 
 .blockButton {

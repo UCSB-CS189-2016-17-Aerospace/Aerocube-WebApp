@@ -19,7 +19,6 @@ class FirebaseService  {
   constructor() {
     if (!FirebaseService.instance) {
       firebase.initializeApp(config);
-      console.log(firebase.auth());
       FirebaseService.instance = this;
     }
     return FirebaseService.instance;
