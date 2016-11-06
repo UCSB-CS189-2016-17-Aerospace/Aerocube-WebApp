@@ -20,26 +20,15 @@ import { Button, FormControl } from 'react-bootstrap';
 export class LoginPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
-    //firebaseService.registerUser('hyshion@gmail.com','yourfirenation');
-    let user = firebaseService.loginUser('hyshion@gmail.com','yourfirenation');
-    let authInfo = undefined;
-    console.log(`authInfo: ${authInfo}`);
-    user.then((v) => {
-      console.log(v);
-      authInfo = v;
-      console.log(`authInfo: ${authInfo}`);
-    }, (v) => {
-    });
-    // console.log(firebaseService.getCurrentUser());
   }
 
   handleSubmit = (evt) => {
     if(evt && evt.preventDefault) {
       evt.preventDefault();
     }
-    let user = firebaseService.loginUser(this.props.email, this.props.password);
-    user.then((v) => {
-      console.log(v);
+    let userPromise = firebaseService.loginUser(this.props.email, this.props.password);
+    userPromise.then((user) => {
+      console.log(user);
       alert(`Success! You are now logged in as ${v.email}`);
     }, (err) => {
       alert(`Code: ${err.code} \r\n Message: ${err.message}`);
