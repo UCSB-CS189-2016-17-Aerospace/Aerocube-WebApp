@@ -28,8 +28,8 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
     }
     let userPromise = firebaseService.loginUser(this.props.email, this.props.password);
     userPromise.then((user) => {
-      console.log(user);
-      alert(`Success! You are now logged in as ${user.email}`);
+      if(user)
+        alert(`Success! You are now logged in as ${user.email}`);
     }, (err) => {
       alert(`Code: ${err.code} \r\n Message: ${err.message}`);
     });
@@ -47,9 +47,9 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
     return (
       <div className={styles.loginPage} style={{background: `url(${background}) center repeat`}}>
         <Helmet
-          title="LoginPage"
+          title="Login"
           meta={[
-            { name: 'description', content: 'Description of LoginPage' },
+            { name: 'description', content: 'Here you can login to the YourFireNation site.' },
           ]}
         />
         <form onSubmit={(evt) => this.handleSubmit(evt)} className={styles.loginForm}>
