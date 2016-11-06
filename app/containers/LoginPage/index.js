@@ -11,7 +11,7 @@ import Helmet from 'react-helmet';
 import * as loginSelectors from './selectors';
 import * as loginActions from './actions';
 import styles from './styles.css';
-import firebaseService from '../../services/firebase-service';
+import firebaseService from '../../services/firebaseService';
 
 import background from './asanoha-400px.png';
 
@@ -29,7 +29,7 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
     let userPromise = firebaseService.loginUser(this.props.email, this.props.password);
     userPromise.then((user) => {
       console.log(user);
-      alert(`Success! You are now logged in as ${v.email}`);
+      alert(`Success! You are now logged in as ${user.email}`);
     }, (err) => {
       alert(`Code: ${err.code} \r\n Message: ${err.message}`);
     });

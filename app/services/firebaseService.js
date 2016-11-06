@@ -1,7 +1,5 @@
-'use strict';
 
 var firebase = require('firebase/app');
-var firebaseAuth = require('firebase/auth');
 
 const config = (process.env.NODE_ENV !== 'production') ? {
   apiKey: "AIzaSyC9IG_3k-6pISqS1HO82GPVqm4bOo_aVb0",
