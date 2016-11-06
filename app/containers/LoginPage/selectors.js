@@ -14,12 +14,18 @@ const selectLoginPageDomain = () => (state) => state.get('loginPage');
  * Default selector used by LoginPage
  */
 
-const selectLoginPage = () => createSelector(
+export const selectLoginPage = () => createSelector(
   selectLoginPageDomain(),
   (substate) => substate.toJS()
 );
 
-export default selectLoginPage;
-export {
-  selectLoginPageDomain,
-};
+
+export const selectEmail = () => createSelector(
+  selectLoginPage(),
+  (state) => state.email
+);
+
+export const selectPassword = () => createSelector(
+  selectLoginPage(),
+  (state) => state.password
+);
