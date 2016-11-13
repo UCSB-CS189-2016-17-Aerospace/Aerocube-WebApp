@@ -58,7 +58,7 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
           </h1>
           <FormControl type="email" placeholder="email" onChange={this.handleUpdateEmail} />
           <FormControl type="password" placeholder="password" onChange={this.handleUpdatePassword} />
-          <Button className={styles.blockButton} type="submit" onClick={(evt) => this.handleSubmit(evt)}>
+          <Button className={styles.blockButton} type="submit" onClick={this.props.handleSubmit}>
             Let's go!~
           </Button>
           <br/>
