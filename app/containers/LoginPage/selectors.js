@@ -16,7 +16,7 @@ const selectLoginPageDomain = () => (state) => state.get('loginPage');
 
 export const selectLoginPage = () => createSelector(
   selectLoginPageDomain(),
-  (substate) => substate.toJS()
+  (substate) => (substate) ? (substate).toJS() : {}
 );
 
 
