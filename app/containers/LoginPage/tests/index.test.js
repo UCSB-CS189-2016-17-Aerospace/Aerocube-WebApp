@@ -4,7 +4,6 @@ import expect from 'expect';
 // import { shallow } from 'enzyme';
 import LoginPage from '../index';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';
 
 const store = configureStore();
