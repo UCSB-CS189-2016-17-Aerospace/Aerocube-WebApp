@@ -19,6 +19,12 @@ class Alert extends React.Component { // eslint-disable-line react/prefer-statel
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      show: nextProps.show
+    });
+  }
+
   static getInfoAlertType = () => {
     return styles.infoAlert;
   };
