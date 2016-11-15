@@ -84,6 +84,11 @@ class Alert extends React.Component { // eslint-disable-line react/prefer-statel
       styles.alertMessage,
       this.props.messageClassName
     ].join(' ');
+
+    let buttonStyles = [
+      styles.hideButton,
+      this.props.buttonClassName
+    ].join(' ');
     // Render normally
     return (
       <div className={alertStyles}
@@ -98,8 +103,9 @@ class Alert extends React.Component { // eslint-disable-line react/prefer-statel
         </p>
         {
           this.props.showHideButton && this.props.type != Alert.getErrorAlertType() ? (
-            <button className={styles.hideButton}
-                  onClick={() => this.handleHide()}>
+            <button className={buttonStyles}
+                    style={this.props.buttonStyle}
+                    onClick={() => this.handleHide()}>
               Hide Me!
             </button>
           ) : null
@@ -117,12 +123,16 @@ Alert.propTypes = {
   headerStyle: React.PropTypes.object,
   // Override styles of the message p element
   messageStyle: React.PropTypes.object,
+  // Override styles of the button element
+  buttonStyle: React.PropTypes.object,
   // Add classes to the outer div element
   className: React.PropTypes.string,
   // Add classes to the header h2 element
   headerClassName: React.PropTypes.string,
   // Add classes to the message p element
   messageClassName: React.PropTypes.string,
+  // Add classes to the button element
+  buttonClassName: React.PropTypes.string,
   // Use 100% width
   block: React.PropTypes.bool,
 
@@ -151,9 +161,11 @@ Alert.defaultProps = {
   style: {},
   headerStyle: {},
   messageStyle: {},
+  buttonStyle: {},
   className: '',
   headerClassName: '',
   messageClassName: '',
+  buttonClassName: '',
   block: false,
   useAlertOnMobile: false,
   hideAfter: 0,

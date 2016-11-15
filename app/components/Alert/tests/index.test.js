@@ -1,9 +1,8 @@
 import Alert from '../index';
 
 import expect from 'expect';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import React from 'react';
-import sinon from 'sinon';
 
 import styles from '../styles.css';
 
@@ -38,12 +37,26 @@ describe('<Alert />', () => {
     expect(wrapper.children().first().type()).toEqual('h2');
   });
 
+  it('Renders a p as the last element inside the outer div', () => {
+    const wrapper = shallow(buildDefault());
+    expect(wrapper.children().last().type()).toEqual('p');
+  });
 
   /** Negative Render **/
 
   it('Renders only one h2 element', () => {
     const wrapper = shallow(buildDefault());
     expect(wrapper.find('h2').length).toEqual(1);
+  });
+
+  it('Renders only one p element', () => {
+    const wrapper = shallow(buildDefault());
+    expect(wrapper.find('p').length).toEqual(1);
+  });
+
+  it('Does not render a button element', () => {
+    const wrapper = shallow(buildDefault());
+    expect(wrapper.find('button').length).toEqual(0);
   });
 
   /** Default Props **/
