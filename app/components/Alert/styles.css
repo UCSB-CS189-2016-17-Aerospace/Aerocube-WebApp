@@ -1,0 +1,62 @@
+.alert { /* stylelint-disable */
+  padding: 1.5em 2em;
+  margin: 0;
+  color: darkslategray;
+  background: whitesmoke;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 2px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px rgba(0,0,0,.117647);
+  overflow: hidden;
+}
+
+.blockAlert {
+  width: 100%;
+}
+
+/* Alert types */
+
+.errorAlert {
+  background: #D76C63;
+  color: white;
+}
+
+.warningAlert {
+  background: #DBA45E;
+  color: white;
+}
+
+.successAlert {
+  background: #41976f;
+  color: white;
+}
+
+.infoAlert {
+  background: whitesmoke;
+  color: darkslategray;
+}
+
+/* Hide Button */
+
+.hideButton {
+  margin-top: 0.25em;
+  font-size: 0.9em;
+  float: right;
+  transition: all 200ms ease-in-out;
+}
+
+.hideButton:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+}
+
+/* Content */
+
+.alertHeader {
+  margin: 0 0 0.5em 0;
+}
+
+.alertMessage {
+  margin: 0.25em 0;
+}
