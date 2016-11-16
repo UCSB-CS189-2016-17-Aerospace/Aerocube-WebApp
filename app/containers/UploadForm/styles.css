@@ -1,5 +1,5 @@
-.uploadForm { /* stylelint-disable */
-  color: white;
+.uploadFormWrapper { /* stylelint-disable */
+  color: darkslategray;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -8,6 +8,25 @@
   height: 100%;
   width: 100%;
   padding: 10% 0;
+  background: url('./contemporary_china_2.png') repeat;
+}
+
+.uploadForm {
+  width: 900px;
+  max-width: 90%;
+  background: #fafafa;
+  border-radius: 4px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px lightgrey;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: center;
+  align-items: center;
+}
+
+.uploadFormHeader {
+  font-size: 2.5em;
 }
 
 .imageSelect,
@@ -15,7 +34,7 @@
   margin: 20px;
 }
 
-.submitButton {
+button {
   background-color: whitesmoke;
   font-size: 2em;
   font-weight: bold;
@@ -23,6 +42,11 @@
   border-radius: 4px;
   padding: 1em;
   line-height: 0;
+  box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px lightgrey;
+}
+
+.submitButton {
+  margin: 1.5em 0 0.75em;
 }
 
 .submitButton:hover {
@@ -33,7 +57,8 @@
 }
 
 .previewImage {
-  max-width: 80%;
+  max-width: 90%;
   height: auto;
-  box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px darkslategrey;
+  border-radius: 2px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px grey;
 }

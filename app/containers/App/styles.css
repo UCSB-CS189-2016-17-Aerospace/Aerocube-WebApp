@@ -22,5 +22,9 @@ body > div {
   flex-direction: row;
   min-height: 100%;
   width: 100%;
-  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px rgba(0,0,0,.117647);
 }

@@ -7,9 +7,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import selectUploadForm from './selectors';
-import styles from './styles.css';
 import Firebase from 'firebase/app'
+
+import selectUploadForm from './selectors';
+
+import styles from './styles.css';
 
 export class UploadForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -45,19 +47,31 @@ export class UploadForm extends React.Component { // eslint-disable-line react/p
   render() {
     let self = this;
     return (
-      <form onSubmit={(evt) => self.handleUpload(evt)} className={styles.uploadForm}>
+      <div className={styles.uploadFormWrapper}>
         <Helmet
-            title="UploadForm"
-            meta={[
-              { name: 'description', content: 'Description of UploadForm' },
-            ]}
+          title="UploadForm"
+          meta={[
+            { name: 'description', content: 'Description of UploadForm' },
+          ]}
         />
-        <input type="file" name="img" accept="image/*" className={styles.imageSelect} onChange={(evt) => self.handleFileSelect(evt)} />
-        <img className={styles.previewImage} src={self.state.imgPreviewUrl} />
-        <button type="submit" className={styles.submitButton} onChange={(evt) => self.handleUpload(evt)}>
-          Upload
-        </button>
-      </form>
+        <form onSubmit={(evt) => self.handleUpload(evt)} className={styles.uploadForm}>
+          <h1 className={styles.uploadFormHeader}>
+            Upload an Image
+          </h1>
+          <input type="file"
+                 name="img"
+                 accept="image/*"
+                 className={styles.imageSelect}
+                 onChange={(evt) => self.handleFileSelect(evt)}
+          />
+          <img className={styles.previewImage}
+               src={self.state.imgPreviewUrl}
+          />
+          <button type="submit" className={styles.submitButton} onChange={(evt) => self.handleUpload(evt)}>
+            Upload
+          </button>
+        </form>
+      </div>
     );
   }
 }
