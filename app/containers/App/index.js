@@ -24,9 +24,7 @@ export default class App extends React.Component { // eslint-disable-line react/
 
   render() {
     return (
-      <div className={styles.container}
-           style={{background: `url(${background}) repeat`}}
-      >
+      <div className={styles.container}>
         {React.Children.toArray(this.props.children)}
       </div>
     );
