@@ -10,8 +10,12 @@
 1. Open webstorm, click check out from Version Control
 1. Login with your github credentials, select this repo
 1. Install necessary node global packages
+
    ```
    $ npm install -g firebase-tools
+   ```
+   
+   ```
    $ npm install -g opener
    ```
 1. Open a terminal window in the project directory, run the node package manager install. This will use the package.json file in the root of the project directory to install dependencies
