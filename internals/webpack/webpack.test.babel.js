@@ -3,6 +3,7 @@
  */
 
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const modules = [
   'app',
   'node_modules',
@@ -18,8 +19,15 @@ module.exports = {
       /node_modules(\\|\/)acorn/,
     ],
     loaders: [
-      { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.css$/, loader: 'null-loader' },
+      { test: /\.json$/, loader: 'json-loader' }, {
+        // Transform our own .css files with PostCSS and CSS-modules
+        test: /\.css$/,
+        exclude: /node_modules/,
+        loader: ExtractTextPlugin.extract({
+          fallbackLoader: 'style-loader',
+          loader: 'css-loader?modules&-autoprefixer',
+        }),
+      },
 
       // sinon.js--aliased for enzyme--expects/requires global vars.
       // imports-loader allows for global vars to be injected into the module.
@@ -38,6 +46,8 @@ module.exports = {
   },
 
   plugins: [
+    // Extract the CSS into a separate file
+    new ExtractTextPlugin('[name].[contenthash].css'),
 
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
     // inside your code for any environment checks; UglifyJS will automatically
