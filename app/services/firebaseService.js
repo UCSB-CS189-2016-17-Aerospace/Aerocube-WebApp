@@ -14,6 +14,9 @@ const config = (process.env.NODE_ENV !== 'production') ? {
   storageBucket: "yfn-aerospace.appspot.com"
 };
 
+/**
+ * FirebaseService
+ */
 class FirebaseService  {
   constructor() {
     if (!FirebaseService.instance) {
@@ -23,44 +26,79 @@ class FirebaseService  {
     return FirebaseService.instance;
   }
 
-  registerUser = (email, password) => {
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch(
-      (error) => {
-        console.log(error.code);
-        console.log(error.message);
-      });
+  /**
+   *
+   * @param email
+   * @param password
+   * @param callback(@param message, @param isSuccess, @param promise)
+   */
+  registerUser = (email, password, callback) => {
+    let promise = firebase.auth().createUserWithEmailAndPassword(email, password);
+    promise.then(user => {
+      callback(`Account created with email ${user.email}. You are now logged in.`, true, promise)
+    }, (error) => {
+      callback(error.message, false, promise);
+    });
   };
 
-  loginUser = (email, password) => {
-    return firebase.auth().signInWithEmailAndPassword(email,password).catch(
-      (error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        if (errorCode === 'auth/wrong-password') {
-          alert('Wrong password.');
-        } else {
-          alert(errorMessage);
-        }
-        console.log(error);
-      });
+  /**
+   *
+   * @param email
+   * @param password
+   * @param callback(@param message, @param isSuccess, @param promise)
+   */
+  loginUser = (email, password, callback) => {
+    let returnableMessage = '';
+    let promise = firebase.auth().signInWithEmailAndPassword(email, password);
+    promise.then(user => {
+      callback(`You are now logged in as ${user.email}`, true, promise)
+    }, error => {
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      if (errorCode === 'auth/wrong-password') {
+        returnableMessage = 'Wrong password.';
+      } else {
+        returnableMessage = errorMessage;
+      }
+      callback(returnableMessage, false, promise);
+    });
   };
 
-  updateUserProfile = (name, photoURL='') => {
+  /**
+   *
+   * @param name
+   * @param photoURL
+   * @param callback(@param response, @param isSuccessful, @param promise)
+   */
+  updateUserProfile = (name, photoURL='', callback) => {
     let response = undefined;
-    this.getCurrentUser().updateProfile({
+    let promise = this.getCurrentUser().updateProfile({
       displayName: name,
       photoURL: photoURL
     }).then(() => {
-      response = "Success!"
-    }, (error) => {
+      response = "Success!";
+      callback(response, true, promise);
+    }, error => {
       response = `Code: ${err.code} \r\n Message: ${err.message}`;
+      callback(response, false, promise);
     });
-    return response;
   };
 
+  /**
+   *
+   * @returns {firebase.User|null}
+   */
   getCurrentUser = () => {
     return firebase.auth().currentUser;
-  }
+  };
+
+  /**
+   *
+   * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
+   */
+  signOut = () => {
+    return firebase.auth().signOut();
+  };
 }
 
 const instance = new FirebaseService();
