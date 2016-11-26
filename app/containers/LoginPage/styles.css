@@ -5,16 +5,24 @@
   align-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
+  background: url('./pattern.png') repeat;
+  padding: 30px 0;
 }
 
 .loginForm {
   background: white;
+  margin: 2em 0;
   padding: 3em 6em;
   box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px rgba(0,0,0,.117647);
   border-radius: 10px;
   color: darkslategray;
   width: 700px;
   max-width: 90%;
+}
+
+.loginForm :global {
+  animation: flex-fade-in 300ms ease forwards!important;
 }
 
 @media (max-width: 767px) {
@@ -36,7 +44,24 @@ input {
   color: darkslategray;
 }
 
-button {
+.passwordInput {
+  padding-right: 4em;
+}
+
+.showPasswordButton {
+  float: right;
+  margin: -4em 1em 0 0;
+  color: gray;
+  user-select: none;
+  cursor: pointer;
+}
+
+.showPasswordButton:hover {
+  text-decoration: underline;
+  color: darkslateblue;
+}
+
+.loginButton {
   padding: 1em;
   font-size: 1.25em;
   border-radius: 2px;
@@ -49,9 +74,14 @@ button {
   transition: all 200ms ease-in-out;
 }
 
-button:hover {
+.loginButton:hover {
   background-color: darkslategray;
   transition: all 200ms ease-in-out;
+}
+
+.disabledButton {
+  color: lightgray;
+  cursor: not-allowed;
 }
 
 .blockButton {
