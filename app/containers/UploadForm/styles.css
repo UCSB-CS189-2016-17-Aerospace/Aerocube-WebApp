@@ -2,9 +2,10 @@
   color: darkslategray;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-content: center;
   align-items: center;
+  padding: 50px 0;
   height: 100%;
   width: 100%;
   background: url('./contemporary_china_2.png') repeat;
@@ -44,7 +45,7 @@
   margin: 20px;
 }
 
-button {
+.button {
   background-color: whitesmoke;
   color: darkslategrey;
   border-radius: 4px;
@@ -116,7 +117,7 @@ button {
 }
 
 .previewImage {
-  width: 1024px;
+  width: 800px;
   max-width: 100%;
   height: auto;
   border-radius: 2px;
