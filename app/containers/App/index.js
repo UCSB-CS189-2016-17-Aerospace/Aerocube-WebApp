@@ -12,21 +12,37 @@
  */
 
 import React from 'react';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 
 import styles from './styles.css';
 import background from './stardust.png';
 
 export default class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor(props) {
+    super(props);
 
+    this.muiTheme = getMuiTheme(baseTheme, {
+      palette: {
+        primary1Color: 'darkslategrey',
+        accent1Color: '#00cabb',
+        pickerHeaderColor: this.primary1Color
+      }
+    });
+  }
   static propTypes = {
     children: React.PropTypes.node,
   };
 
   render() {
+    let self = this;
     return (
-      <div className={styles.container}>
-        {React.Children.toArray(this.props.children)}
-      </div>
+      <MuiThemeProvider muiTheme={ self.muiTheme }>
+        <div className={styles.container}>
+          {React.Children.toArray(this.props.children)}
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
