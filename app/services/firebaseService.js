@@ -1,6 +1,6 @@
 
-var firebase = require('firebase/app');
-var firebaseAuth = require('firebase/auth'); // This is a necessary import
+const firebase = require('firebase/app');
+const firebaseAuth = require('firebase/auth'); // This is a necessary import
 
 const config = (process.env.NODE_ENV !== 'production') ? {
   apiKey: "AIzaSyC9IG_3k-6pISqS1HO82GPVqm4bOo_aVb0",
@@ -90,6 +90,21 @@ class FirebaseService  {
    */
   getCurrentUser = () => {
     return firebase.auth().currentUser;
+  };
+
+  /**
+   *
+   * @param authCallback
+   * @param authRemovedCallback
+   */
+  setAuthObserver = (authCallback, authRemovedCallback) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        authCallback(user);
+      } else {
+        authRemovedCallback();
+      }
+    })
   };
 
   /**

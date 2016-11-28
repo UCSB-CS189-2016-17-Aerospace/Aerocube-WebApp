@@ -1,7 +1,17 @@
+/**
+ * The global state selectors
+ */
+
 import { createSelector } from 'reselect';
 
-// selectLocationState expects a plain JS object for the routing state
-const selectLocationState = () => {
+export const selectGlobalDomain = () => (state) => state.get('global');
+
+export const selectGlobal = () => createSelector(
+  selectGlobalDomain(),
+  (state) => state.toJS()
+);
+
+export const selectLocationState = () => {
   let prevRoutingState;
   let prevRoutingStateJS;
 
@@ -17,15 +27,9 @@ const selectLocationState = () => {
   };
 };
 
-/**
- * The global state selectors
- */
-
-export const selectGlobalDomain = () => (state) => state.get('global');
-
-export const selectGlobal = () => createSelector(
-  selectGlobalDomain(),
-  (state) => state.toJS()
+export const selectShowRouteChangeWarningDialog = () => createSelector(
+  selectGlobal(),
+  (state) => state.showRouteChangeWarningDialog
 );
 
 export const selectNavOpen = () => createSelector(
@@ -53,6 +57,12 @@ export const selectBodyHeight = () => createSelector(
   (state) => state.bodyHeight
 );
 
-export {
-  selectLocationState,
-};
+export const selectHeaderType = () => createSelector(
+  selectGlobal(),
+  (state) => state.header
+);
+
+export const selectFooterType = () => createSelector(
+  selectGlobal(),
+  (state) => state.footer
+);

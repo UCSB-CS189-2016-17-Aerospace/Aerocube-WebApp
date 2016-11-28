@@ -8,13 +8,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
+import { push } from 'react-router-redux';
 import { Button, FormControl } from 'react-bootstrap';
+import { bindActionCreators } from 'redux';
 
 import * as loginSelectors from './selectors';
 import * as loginActions from './actions';
 import styles from './styles.css';
 
-import firebaseService from '../../services/firebaseService';
+import FirebaseService from '../../services/firebaseService';
 import Alert from '../../components/Alert';
 
 import background from './pattern.png';
@@ -31,22 +33,37 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
     }
   }
 
+  componentWillMount() {
+    FirebaseService.setAuthObserver(this.onAuthSuccess, this.onAuthRemoved);
+  }
+
+  onAuthSuccess = () => {
+    let self = this;
+    setTimeout(() => {
+      self.props.changeRoute('/upload');
+    }, 200);
+  };
+
+  onAuthRemoved = () => {
+
+  };
+
   handleSubmit = (evt) => {
+    let self = this;
     if(evt && evt.preventDefault) {
       evt.preventDefault();
     }
-    this.setState({
+    self.setState({
       message: 'We are attempting to log you in',
       header: 'Please wait',
       alertType: Alert.getInfoAlertType()
-    }, firebaseService.loginUser(this.props.email, this.props.password, (message, isSuccess, promise) => {
-      this.setState({
+    }, FirebaseService.loginUser(self.props.email, this.props.password, (message, isSuccess, promise) => {
+      self.setState({
         message: message,
         header: isSuccess ? 'Success' : 'Error',
         alertType: isSuccess ? Alert.getSuccessAlertType() : Alert.getErrorAlertType()
       });
     }));
-
   };
 
   handleUpdateEmail = (evt) => {
@@ -107,10 +124,13 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
 }
 
 LoginPage.propTypes = {
-  email: React.PropTypes.string,
-  password: React.PropTypes.string,
-  updateEmail: React.PropTypes.func,
-  updatePassword: React.PropTypes.func
+  /* Selectors */
+  email: React.PropTypes.string.isRequired,
+  password: React.PropTypes.string.isRequired,
+  /* Actions */
+  updateEmail: React.PropTypes.func.isRequired,
+  updatePassword: React.PropTypes.func.isRequired,
+  changeRoute: React.PropTypes.func.isRequired
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -119,10 +139,9 @@ const mapStateToProps = createStructuredSelector({
 });
 
 function mapDispatchToProps(dispatch) {
-  return {
-    updateEmail: (email) => dispatch(loginActions.updateEmail(email)),
-    updatePassword: (password) => dispatch(loginActions.updatePassword(password))
-  };
+  return Object.assign({
+    changeRoute: (url) => dispatch(push(url))
+  }, bindActionCreators(loginActions, dispatch));
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
