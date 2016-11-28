@@ -17,7 +17,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 
 import styles from './styles.css';
-import background from './stardust.png';
 
 export default class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {

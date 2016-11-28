@@ -12,12 +12,14 @@
 import React from 'react';
 
 import styles from './styles.css';
+import background from './stardust.png';
 
 export default class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   render() {
     return (
-      <article className={styles.article}>
+      <article className={styles.article}
+               style={{background: `url(${background}) repeat`}}>
         <h1 className={styles.header}>
           Your Fire Nation
         </h1>

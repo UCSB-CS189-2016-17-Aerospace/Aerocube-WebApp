@@ -74,6 +74,18 @@ module.exports = (options) => ({
       ],
     }),
 
+    new webpack.DefinePlugin({
+      postcss: () => [
+        postcssFocus(), // Add a :focus to every :hover
+        cssnext({ // Allow future CSS features to be used, also auto-prefixes the CSS...
+          browsers: ['last 2 versions', 'IE > 10'], // ...based on this browser list
+        }),
+        postcssReporter({ // Posts messages from plugins to the terminal
+          clearMessages: true,
+        }),
+      ],
+    }),
+
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
     // inside your code for any environment checks; UglifyJS will automatically
     // drop any unreachable code.
