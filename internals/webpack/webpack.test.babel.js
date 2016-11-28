@@ -33,10 +33,10 @@ module.exports = {
       // imports-loader allows for global vars to be injected into the module.
       // See https://github.com/webpack/webpack/issues/304
       { test: /sinon(\\|\/)pkg(\\|\/)sinon\.js/,
-        loader: 'imports?define=>false,require=>false',
+        loader: 'imports-loader?define=>false,require=>false',
       },
       { test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude: [/node_modules/],
       },
       { test: /\.jpe?g$|\.gif$|\.png$|\.svg$/i,
@@ -73,12 +73,11 @@ module.exports = {
   // required for enzyme to work properly
   externals: {
     jsdom: 'window',
-    'react/addons': true,
-    'react/lib/ExecutionEnvironment': true,
+    'react/addons': 'true',
+    'react/lib/ExecutionEnvironment': 'true',
     'react/lib/ReactContext': 'window',
   },
   resolve: {
-    modulesDirectories: modules,
     modules,
     alias: {
       // required for enzyme to work properly

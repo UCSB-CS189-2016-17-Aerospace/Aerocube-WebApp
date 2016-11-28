@@ -8,31 +8,45 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
+import { Button, FormControl } from 'react-bootstrap';
+
 import * as loginSelectors from './selectors';
 import * as loginActions from './actions';
 import styles from './styles.css';
+
 import firebaseService from '../../services/firebaseService';
+import Alert from '../../components/Alert';
 
-import background from './asanoha-400px.png';
+import background from './pattern.png';
 
-import { Button, FormControl } from 'react-bootstrap';
 
 export class LoginPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
+    this.state = {
+      message: '',
+      header: '',
+      alertType: Alert.getInfoAlertType(),
+      showPassword: false
+    }
   }
 
   handleSubmit = (evt) => {
     if(evt && evt.preventDefault) {
       evt.preventDefault();
     }
-    let userPromise = firebaseService.loginUser(this.props.email, this.props.password);
-    userPromise.then((user) => {
-      if(user)
-        alert(`Success! You are now logged in as ${user.email}`);
-    }, (err) => {
-      alert(`Code: ${err.code} \r\n Message: ${err.message}`);
-    });
+    this.setState({
+      message: 'We are attempting to log you in',
+      header: 'Please wait',
+      alertType: Alert.getInfoAlertType()
+    }, firebaseService.loginUser(this.props.email, this.props.password, (message, isSuccess, promise) => {
+      this.setState({
+        message: message,
+        header: isSuccess ? 'Success' : 'Error',
+        alertType: isSuccess ? Alert.getSuccessAlertType() : Alert.getErrorAlertType()
+      });
+    }));
+
   };
 
   handleUpdateEmail = (evt) => {
@@ -44,21 +58,45 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
   };
 
   render() {
+    let buttonStyles = [styles.loginButton, styles.blockButton];
+    buttonStyles.concat(styles.disabledButton);
+
     return (
-      <div className={styles.loginPage} style={{background: `url(${background}) center repeat`}}>
+      <div className={styles.loginPage}>
         <Helmet
           title="Login"
           meta={[
             { name: 'description', content: 'Here you can login to the YourFireNation site.' },
           ]}
         />
-        <form onSubmit={(evt) => this.handleSubmit(evt)} className={styles.loginForm}>
+        <Alert show={this.state.message.length > 0}
+               header={this.state.header}
+               message={this.state.message}
+               type={this.state.alertType}
+               showHideButton
+        />
+        <form onSubmit={(evt) => this.handleSubmit(evt)}
+              className={styles.loginForm}>
           <h1>
             Login
           </h1>
-          <FormControl type="email" placeholder="email" onChange={this.handleUpdateEmail} />
-          <FormControl type="password" placeholder="password" onChange={this.handleUpdatePassword} />
-          <Button className={styles.blockButton} type="submit" onClick={(evt) => this.handleSubmit(evt)}>
+          <FormControl type="email"
+                       placeholder="email"
+                       onChange={this.handleUpdateEmail}
+          />
+          <FormControl type={this.state.showPassword ? 'text' : 'password'}
+                       className={styles.passwordInput}
+                       placeholder="password"
+                       onChange={this.handleUpdatePassword}
+          />
+          <span className={styles.showPasswordButton}
+                onClick={() => this.setState({showPassword: !this.state.showPassword})}>
+            { this.state.showPassword ? 'hide' : 'show' }
+          </span>
+          <Button className={buttonStyles.join(' ')}
+                  disabled={this.props.email.length == 0 || this.props.password.length == 0}
+                  type="submit"
+                  onClick={this.props.handleSubmit}>
             Let's go!~
           </Button>
           <br/>
