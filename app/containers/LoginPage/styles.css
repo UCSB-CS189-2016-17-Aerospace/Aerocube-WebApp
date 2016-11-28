@@ -22,7 +22,7 @@
 }
 
 .loginForm :global {
-  animation: flex-fade-in 300ms ease forwards!important;
+  animation: flex-fade-in 500ms ease forwards!important;
 }
 
 @media (max-width: 767px) {
