@@ -54,6 +54,26 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      path: '/upload',
+      name: 'uploadForm',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/UploadForm/reducer'),
+          System.import('containers/UploadForm/sagas'),
+          System.import('containers/UploadForm'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('uploadForm', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
