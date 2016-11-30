@@ -2,9 +2,12 @@ import request from './request';
 
 /** Settings **/
 const BASE_PORT = '3000';
+/*
 const BASE_URL =  (process.env.NODE_ENV !== 'production') ?
   `https://127.0.0.1:${BASE_PORT}` :
   `https://192.168.0.111:${BASE_PORT}`;
+*/
+const BASE_URL = `https://127.0.0.1:${BASE_PORT}`;
 const API_URL = `${BASE_URL}/api`;
 
 /**
