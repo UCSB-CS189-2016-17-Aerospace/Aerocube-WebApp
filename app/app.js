@@ -102,4 +102,3 @@ if (!window.Intl) {
 // it's not most important operation and if main code fails,
 // we do not want it installed
 import { install } from 'offline-plugin/runtime';
-install();
