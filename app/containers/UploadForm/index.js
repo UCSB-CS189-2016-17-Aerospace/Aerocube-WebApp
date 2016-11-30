@@ -106,6 +106,7 @@ export class UploadForm extends React.Component { // eslint-disable-line react/p
       let data = new FormData();
       data.append('photo', self.state.img);
       APIClient.post('uploadImage', data).then((response) => {
+        console.log(response);
         console.log(response.data);
         self.setState({
           alertHeader: 'Success',

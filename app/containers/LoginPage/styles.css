@@ -31,7 +31,7 @@
   }
 }
 
-input {
+.loginForm input {
   width: 100%;
   font-size: 1.25em;
   padding: 1em;

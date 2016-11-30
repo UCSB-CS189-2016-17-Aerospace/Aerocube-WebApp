@@ -28,6 +28,7 @@
   cursor: pointer;
   transition: all 200ms ease;
   color: lightslategray;
+  user-select: none;
 }
 
 .logoutText:hover {
