@@ -185,14 +185,17 @@
       "!app/**/*.test.{js,jsx}",
       "!app/*/RbGenerated*/*.{js,jsx}",
       "!app/app.js",
-      "!app/routes.js"
+      "!app/routes.js",
+      "!app/constants/*",
+      "!app/global-styles.js",
+      "!app/**/messages.js"
     ],
     "coverageThreshold": {
       "global": {
-        "statements": 90,
-        "branches": 80,
-        "functions": 90,
-        "lines": 90
+        "statements": 60,
+        "branches": 40,
+        "functions": 60,
+        "lines": 80
       }
     },
     "moduleDirectories": [

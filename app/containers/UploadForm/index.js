@@ -14,9 +14,9 @@ const scroll = Scroll.scroller;
 
 import selectUploadForm from './selectors';
 
-import Img from '../../components/Img/Img';
-import Alert from '../../components/Alert/index';
-import APIClient from '../../utils/apiUtils';
+import Img from 'components/Img';
+import Alert from 'components/Alert';
+import APIClient from 'utils/apiUtils';
 
 import styles from './styles.css';
 
