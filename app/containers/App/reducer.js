@@ -15,21 +15,11 @@ import { fromJS } from 'immutable';
 
 // The initial state of the App
 const initialState = fromJS({
-  navOpen: false,
-  pageHeight: 0,
-  pageWidth: 0,
-  bodyHeight: 0,
-  bodyWidth: 0
+  navOpen: false
 });
 
 function appReducer(state = initialState, action) {
   switch (action.type) {
-    case constants.UPDATE_VIEW_SIZES: {
-      return state.set('pageHeight', action.height)
-        .set('pageWidth', action.width)
-        .set('bodyHeight', action.bodyHeight)
-        .set('bodyWidth', action.bodyWidth);
-    }
     case constants.TOGGLE_NAV:
       return state.set('navOpen', action.open);
     default:

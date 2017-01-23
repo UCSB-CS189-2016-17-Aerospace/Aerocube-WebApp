@@ -4,43 +4,40 @@
  *
  * This component is the skeleton around the actual pages, and should only
  * contain code that should be seen on all pages. (e.g. navigation bar)
- *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
  */
 
 import React from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import CircularProgress from 'material-ui/CircularProgress'
+import Helmet from 'react-helmet';
+import styled from 'styled-components';
+
+import styles from './styles.css';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { createStructuredSelector } from 'reselect';
 import { bindActionCreators } from 'redux';
 
-import FirebaseService from '../../services/firebaseService';
-import LoginPage from '../LoginPage/index';
-
+import Button from 'components/Button';
+import LoadingSplashscreen from 'components/LoadingSplashscreen';
+import withProgressBar from 'components/ProgressBar';
+import FirebaseService from 'services/firebaseService';
 import * as globalSelectors from './selectors';
 import * as globalActions from './actions';
+import * as strings from 'constants/strings';
+import * as cssConstants from 'constants/cssConstants';
 
-import styles from './styles.css';
+const AppWrapper = styled.div`
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 100%;
+`;
 
-export class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class App extends React.PureComponent {
   constructor(props) {
     super(props);
-
-    this.muiTheme = getMuiTheme(baseTheme, {
-      palette: {
-        primary1Color: 'darkslategrey',
-        accent1Color: '#00cabb',
-        pickerHeaderColor: this.primary1Color
-      }
-    });
-
     this.state = {
       loading: true,
       auth: null,
@@ -49,19 +46,6 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
 
   componentWillMount() {
     FirebaseService.setAuthObserver(this.onAuthSuccess, this.onAuthRemoved);
-  }
-
-  componentDidMount() {
-    let self = this;
-    /* Get Page and Body Dimensions */
-    let docDOMRect = window.document.body.getBoundingClientRect();
-    let bodyDOMRect = window.document.getElementById('app-content').getBoundingClientRect();
-    self.props.updateViewSizes(docDOMRect.width, docDOMRect.height, bodyDOMRect.width, bodyDOMRect.height);
-    window.addEventListener('resize', () => {
-      let docDOMRect = window.document.body.getBoundingClientRect();
-      let bodyDOMRect = window.document.getElementById('app-content').getBoundingClientRect();
-      self.props.updateViewSizes(docDOMRect.width, docDOMRect.height, bodyDOMRect.width, bodyDOMRect.height);
-    }, false);
   }
 
   onAuthSuccess = (user) => {
@@ -96,45 +80,36 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
     FirebaseService.signOut()
   };
 
-  renderLoadingDialog = () => {
-    return (
-      <div className={styles.loadingWrapper}>
-        <h1>Loading</h1>
-        <CircularProgress />
-      </div>
-    )
-  };
-
-  renderLogoutButton = () => {
-    let self = this;
-    return (
-      <a className={styles.logoutText} onClick={self.handleLogout}>
-        logout
-      </a>
-    )
-  };
-
   render() {
-    let self = this;
     let body = null;
-    if(self.state.loading) {
-      body = this.renderLoadingDialog();
+    if(this.state.loading) {
+      body = <LoadingSplashscreen />
     } else {
       body = React.Children.toArray(this.props.children)
     }
 
     let logoutButton = null;
-    if(self.state.auth && !self.state.loading) {
-      logoutButton = self.renderLogoutButton();
+    if(this.state.auth && !this.state.loading) {
+      logoutButton = (
+        <Button color={cssConstants.colors.primary}
+                targetRoute={'/'}
+                onClick={this.handleLogout}>
+          Logout
+        </Button>
+      );
     }
-
     return (
-      <MuiThemeProvider muiTheme={ self.muiTheme }>
-        <div className={styles.container} id="app-content">
-          { body }
-          { logoutButton }
-        </div>
-      </MuiThemeProvider>
+      <AppWrapper>
+        <Helmet
+          titleTemplate={`%s | ${strings.siteName}`}
+          defaultTitle={`${strings.siteName}`}
+          meta={[
+            { name: 'description', content: '' },
+          ]}
+        />
+        { body }
+        { logoutButton }
+      </AppWrapper>
     );
   }
 }
@@ -144,12 +119,10 @@ App.propTypes = {
 
   /* Actions */
   changeRoute: React.PropTypes.func,
-  updateViewSizes: React.PropTypes.func.isRequired,
   setNavOpen: React.PropTypes.func.isRequired,
 
   /* Selectors */
-  navOpen: React.PropTypes.bool.isRequired,
-  location: React.PropTypes.any.isRequired
+  navOpen: React.PropTypes.bool.isRequired
 };
 
 function mapDispatchToProps(dispatch) {
@@ -159,12 +132,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 const structuredSelector = createStructuredSelector({
-  navOpen: globalSelectors.selectNavOpen(),
-  location: globalSelectors.selectLocationState()
+  navOpen: globalSelectors.selectNavOpen()
 });
 
 function mapStateToProps(state, ownProps) {
   return structuredSelector;
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withProgressBar(connect(mapStateToProps, mapDispatchToProps)(App));

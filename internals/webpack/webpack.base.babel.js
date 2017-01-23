@@ -4,11 +4,8 @@
 
 const path = require('path');
 const webpack = require('webpack');
-
-// PostCSS plugins
 const cssnext = require('postcss-cssnext');
 const postcssFocus = require('postcss-focus');
-const postcssReporter = require('postcss-reporter');
 
 module.exports = (options) => ({
   entry: options.entry,
@@ -19,14 +16,9 @@ module.exports = (options) => ({
   module: {
     loaders: [{
       test: /\.js$/, // Transform all .js files required somewhere with Babel
-      loader: 'babel-loader',
+      loader: 'babel',
       exclude: /node_modules/,
       query: options.babelQuery,
-    }, {
-      // Transform our own .css files with PostCSS and CSS-modules
-      test: /\.css$/,
-      exclude: /node_modules/,
-      loader: options.cssLoaders,
     }, {
       // Do not transform vendor's CSS with CSS-modules
       // The point is that they remain in global scope.
@@ -37,13 +29,28 @@ module.exports = (options) => ({
       include: /node_modules/,
       loaders: ['style-loader', 'css-loader'],
     }, {
+      test: /\.css$/,
+      exclude: /node_modules/,
+      loaders: ['style-loader', 'css-loader?importLoaders=1!postcss-loader'],
+    }, {
       test: /\.(eot|svg|ttf|woff|woff2)$/,
-      loader: 'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+      loader: 'file-loader',
     }, {
       test: /\.(jpg|png|gif)$/,
       loaders: [
-        'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-        'image-webpack-loader?{progressive:true, optimizationLevel: 7, interlaced: false, pngquant:{quality: "65-90", speed: 4}}',
+        'file-loader',
+        {
+          loader: 'image-webpack',
+          query: {
+            progressive: true,
+            optimizationLevel: 7,
+            interlaced: true,
+            pngquant: {
+              quality: '65-90',
+              speed: 4,
+            },
+          },
+        },
       ],
     }, {
       test: /\.html$/,
@@ -53,37 +60,29 @@ module.exports = (options) => ({
       loader: 'json-loader',
     }, {
       test: /\.(mp4|webm)$/,
-      loader: 'url-loader?limit=10000',
+      loader: 'url-loader',
+      query: {
+        limit: 10000,
+      },
+    }, {
+      test: /react-icons[\/\\](.)*(.js)$/,
+      loader: 'babel-loader'
     }],
   },
   plugins: options.plugins.concat([
     new webpack.ProvidePlugin({
       // make fetch available
-      fetch: 'exports-loader?self.fetch!whatwg-fetch',
+      fetch: 'exports?self.fetch!whatwg-fetch',
     }),
-
-    new webpack.DefinePlugin({
-      postcss: () => [
-        postcssFocus(), // Add a :focus to every :hover
-        cssnext({ // Allow future CSS features to be used, also auto-prefixes the CSS...
-          browsers: ['last 2 versions', 'IE > 10'], // ...based on this browser list
-        }),
-        postcssReporter({ // Posts messages from plugins to the terminal
-          clearMessages: true,
-        }),
-      ],
-    }),
-
-    new webpack.DefinePlugin({
-      postcss: () => [
-        postcssFocus(), // Add a :focus to every :hover
-        cssnext({ // Allow future CSS features to be used, also auto-prefixes the CSS...
-          browsers: ['last 2 versions', 'IE > 10'], // ...based on this browser list
-        }),
-        postcssReporter({ // Posts messages from plugins to the terminal
-          clearMessages: true,
-        }),
-      ],
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        postcss: [
+          postcssFocus(), // Add a :focus to every :hover
+          cssnext({ // Allow future CSS features to be used, also auto-prefixes the CSS...
+            browsers: ['last 5 versions', 'IE > 9'], // ...based on this browser list
+          }),
+        ]
+      },
     }),
 
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
@@ -94,6 +93,7 @@ module.exports = (options) => ({
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
+    new webpack.NamedModulesPlugin()
   ]),
   resolve: {
     modules: ['app', 'node_modules'],
@@ -103,11 +103,11 @@ module.exports = (options) => ({
       '.react.js',
     ],
     mainFields: [
+      'browser',
       'jsnext:main',
       'main',
     ],
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
-  stats: false, // Don't show stats in the console
 });

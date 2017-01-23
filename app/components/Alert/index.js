@@ -5,10 +5,77 @@
 */
 
 import React from 'react';
+import styled, {css} from 'styled-components';
+import * as cssConstants from 'constants/cssConstants';
 
-import styles from './styles.css';
+const AlertDiv = styled.div`
+  padding: 1.5em 2em;
+  margin: 0;
+  color: darkslategray;
+  background: whitesmoke;
+  max-width: 100%;
+  width: ${(props) => props.block ? '100%' : '600px'};
+  border-radius: 2px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px rgba(0,0,0,.117647);
+  overflow: hidden;
+  flex-shrink: 0;
+  flex-grow: 0;
+  animation: ${cssConstants.animations.fadeIn};
+  
+  ${(props) => {
+    switch(props.type) {
+      case Alert.getErrorAlertType():
+        return ErrorAlert;
+      case Alert.getWarningAlertType():
+        return WarningAlert;
+      case Alert.getSuccessAlertType():
+        return SuccessAlert;
+      case Alert.getInfoAlertType():
+        return InfoAlert;
+    }
+  }}
+`;
 
-import isMobileDevice from '../../utils/deviceChecker';
+const ErrorAlert = css`
+  background: #D76C63;
+  color: white;
+`;
+
+const WarningAlert = css`
+  background: #DBA45E;
+  color: white;
+`;
+
+const SuccessAlert = css`
+  background: #41976f;
+  color: white;
+`;
+
+const InfoAlert = css`
+  background: whitesmoke;
+  color: darkslategray;
+`;
+
+const HideButton = styled.button`
+  margin-top: 0.25em;
+  font-size: 0.9em;
+  float: right;
+  transition: all 200ms ease-in-out;
+  
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    transition: all 200ms ease-in-out;
+  }
+`;
+
+const AlertHeader = styled.h2`
+  margin: 0 0 0.5em 0;
+`;
+
+const AlertMessage = styled.p`
+  margin: 0.25em 0;
+`;
 
 class Alert extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -26,19 +93,19 @@ class Alert extends React.Component { // eslint-disable-line react/prefer-statel
   }
 
   static getInfoAlertType = () => {
-    return styles.infoAlert;
+    return 'infoAlert';
   };
 
   static getErrorAlertType = () => {
-    return styles.errorAlert;
+    return 'errorAlert';
   };
 
   static getWarningAlertType = () => {
-    return styles.warningAlert;
+    return 'warningAlert';
   };
 
   static getSuccessAlertType = () => {
-    return styles.successAlert;
+    return 'successAlert';
   };
 
   handleHideAfter = (seconds) => {
@@ -60,57 +127,39 @@ class Alert extends React.Component { // eslint-disable-line react/prefer-statel
     if(!this.state.show) {
       return null;
     }
-    // Use Alert function
+    // TODO: Use Alert function on mobile
+    /*
     if(isMobileDevice() && this.props.useAlertOnMobile) {
       let type = this.props.type !== this.getInfoAlertType() ? this.props.type : undefined;
       window.alert(`${type}${type ? ':' : undefined} ${this.props.header}\n\n${this.props.message}`);
       return null;
     }
+    */
     this.handleHideAfter(this.props.hideAfter);
-    // Determine styling
-    let alertStyles = [
-      styles.alert,
-      this.props.type,
-      this.props.block ? styles.blockAlert : '',
-      this.props.className
-    ].join(' ');
-
-    let headerStyles = [
-      styles.alertHeader,
-      this.props.headerClassName
-    ].join(' ');
-
-    let messageStyles = [
-      styles.alertMessage,
-      this.props.messageClassName
-    ].join(' ');
-
-    let buttonStyles = [
-      styles.hideButton,
-      this.props.buttonClassName
-    ].join(' ');
     // Render normally
     return (
-      <div className={alertStyles}
-           style={this.props.style}>
-        <h2 className={headerStyles}
+      <AlertDiv className={this.props.className}
+                style={this.props.style}
+                type={this.props.type}
+                block={this.props.block}>
+        <AlertHeader className={this.props.headerClassName}
             style={this.props.headerStyle}>
           { this.props.header }
-        </h2>
-        <p className={messageStyles}
-           style={this.props.messageStyle}>
+        </AlertHeader>
+        <AlertMessage className={this.props.messageClassName}
+                      style={this.props.messageStyle}>
           { this.props.message }
-        </p>
+        </AlertMessage>
         {
           this.props.showHideButton && this.props.type != Alert.getErrorAlertType() ? (
-            <button className={buttonStyles}
-                    style={this.props.buttonStyle}
-                    onClick={() => this.handleHide()}>
+            <HideButton className={this.props.buttonClassName}
+                        style={this.props.buttonStyle}
+                        onClick={() => this.handleHide()}>
               Hide Me!
-            </button>
+            </HideButton>
           ) : null
         }
-      </div>
+      </AlertDiv>
     );
   }
 }

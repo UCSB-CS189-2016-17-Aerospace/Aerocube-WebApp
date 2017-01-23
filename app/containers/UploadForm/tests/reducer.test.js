@@ -1,4 +1,4 @@
-import expect from 'expect';
+
 import uploadFormReducer from '../reducer';
 import { fromJS } from 'immutable';
 

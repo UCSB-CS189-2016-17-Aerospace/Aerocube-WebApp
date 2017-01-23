@@ -5,26 +5,30 @@
  *
  */
 import { addLocaleData } from 'react-intl';
-
 import enLocaleData from 'react-intl/locale-data/en';
 
-export const appLocales = [
-  'en',
-];
+import { DEFAULT_LOCALE } from '../app/containers/App/constants';
 
 import enTranslationMessages from './translations/en.json';
 
 addLocaleData(enLocaleData);
 
-const formatTranslationMessages = (messages) => {
-  const formattedMessages = {};
-  for (const message of messages) {
-    formattedMessages[message.id] = message.message || message.defaultMessage;
-  }
+export const appLocales = [
+  'en',
+];
 
-  return formattedMessages;
+export const formatTranslationMessages = (locale, messages) => {
+  const defaultFormattedMessages = locale !== DEFAULT_LOCALE
+    ? formatTranslationMessages(DEFAULT_LOCALE, enTranslationMessages)
+    : {};
+  return Object.keys(messages).reduce((formattedMessages, key) => {
+    const formattedMessage = !messages[key] && locale !== DEFAULT_LOCALE
+      ? defaultFormattedMessages[key]
+      : messages[key];
+    return Object.assign(formattedMessages, { [key]: formattedMessage });
+  }, {});
 };
 
 export const translationMessages = {
-  en: formatTranslationMessages(enTranslationMessages),
+  en: formatTranslationMessages('en', enTranslationMessages),
 };
