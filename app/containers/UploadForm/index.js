@@ -139,18 +139,18 @@ export class UploadForm extends React.Component { // eslint-disable-line react/p
   render() {
     let self = this;
     let body = self.state.imgPreviewUrl ? (
-      <div className={styles.previewImageWrapper}>
+      <div className='previewImageWrapper'>
         <Element name="UploadImg" />
-        <Img className={styles.previewImage}
+        <Img className='previewImage'
              lazyLoad={true}
              spinnerWrapperStyle={{width: '100%', height: 300}}
              src={self.state.imgPreviewUrl} />
-        <button type="submit" className={[styles.button, styles.submitButton].join(' ')} onClick={(evt) => self.handleUpload(evt)}>
+        <button type="submit" className={['button', 'submitButton'].join(' ')} onClick={(evt) => self.handleUpload(evt)}>
           Upload Image
         </button>
-        <p className={styles.selectAnotherText}>
+        <p className={'selectAnotherText'}>
           Or select another image
-          <a onClick={this.clearImage} className={styles.clearImage}>
+          <a onClick={this.clearImage} className='clearImage'>
             by clicking here.
           </a>
         </p>
@@ -160,8 +160,8 @@ export class UploadForm extends React.Component { // eslint-disable-line react/p
                 multiple={false}
                 onDrop={this.onDrop}
                 accept="image/*"
-                className={styles.dropZone}>
-        <p className={styles.dropZoneText}>
+                className='dropZone'>
+        <p className='dropZoneText'>
           Click to Browse Your Computer<br/>
           <b>or</b><br/>
           Drag Picture Here
@@ -169,7 +169,7 @@ export class UploadForm extends React.Component { // eslint-disable-line react/p
       </Dropzone>
     );
     return (
-      <div className={styles.uploadFormWrapper}>
+      <div className='uploadFormWrapper'>
         <Helmet
           title="UploadForm"
           meta={[
@@ -182,11 +182,11 @@ export class UploadForm extends React.Component { // eslint-disable-line react/p
                message={self.state.alertMessage}
                type={self.state.alertType}
                showHideButton={true} />
-        <form onSubmit={(evt) => self.handleUpload(evt)} className={styles.uploadForm}>
-          <h1 className={styles.uploadFormHeader}>
+        <form onSubmit={(evt) => self.handleUpload(evt)} className='uploadForm'>
+          <h1 className='uploadFormHeader'>
             Upload an Image
           </h1>
-          <p className={styles.uploadFormSubHeader}>
+          <p className='uploadFormSubHeader'>
             It's very simple.
           </p>
           { body }

@@ -6,7 +6,7 @@
 
 import React from 'react';
 import LazyLoad from 'react-lazyload';
-import { CircularProgress } from 'material-ui';
+import LoadingIndicator from 'components/LoadingIndicator/index';
 
 require('./styles.css');
 
@@ -43,7 +43,7 @@ class Img extends React.Component {
       output = (
         <div className={`img-spinnerWrapper ${self.props.spinnerWrapperClassName}`}
              style={self.props.spinnerWrapperStyle}>
-          <CircularProgress style={self.props.spinnerStyle} />
+          <LoadingIndicator style={self.props.spinnerStyle} />
         </div>
       )
     } else {

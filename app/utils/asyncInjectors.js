@@ -1,7 +1,12 @@
-import { conformsTo, isEmpty, isFunction, isObject, isString } from 'lodash';
+import conformsTo from 'lodash/conformsTo';
+import isEmpty from 'lodash/isEmpty';
+import isFunction from 'lodash/isFunction';
+import isObject from 'lodash/isObject';
+import isString from 'lodash/isString';
 import invariant from 'invariant';
 import warning from 'warning';
-import createReducer from 'reducers';
+
+import createReducer from '../reducers';
 
 /**
  * Validate the shape of redux store
@@ -44,7 +49,7 @@ export function injectAsyncReducer(store, isValid) {
  * Inject an asynchronously loaded saga
  */
 export function injectAsyncSagas(store, isValid) {
-  return function injectSagas(sagas) {
+  return function injectSagas(sagas, name) {
     if (!isValid) checkStore(store);
 
     invariant(
@@ -57,6 +62,11 @@ export function injectAsyncSagas(store, isValid) {
       '(app/utils...) injectAsyncSagas: Received an empty `sagas` array'
     );
 
+    if(store.asyncSagas[name])
+      return;
+    else {
+      store.asyncSagas[name] = sagas;
+    }
     sagas.map(store.runSaga);
   };
 }
