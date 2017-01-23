@@ -11,6 +11,4 @@
 
 export const TOGGLE_NAV = 'xperiiWebApp/App/TOGGLE_NAV';
 
-export const UPDATE_VIEW_SIZES = 'xperiiWebApp/App/UPDATE_VIEW_SIZES';
-
 export const DEFAULT_LOCALE = 'en';

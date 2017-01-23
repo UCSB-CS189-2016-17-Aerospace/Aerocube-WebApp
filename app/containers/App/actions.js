@@ -23,13 +23,3 @@ export function setNavOpen(open) {
     open
   };
 }
-
-export function updateViewSizes(width, height, bodyWidth, bodyHeight) {
-  return {
-    type: constants.UPDATE_VIEW_SIZES,
-    width: width,
-    height: height,
-    bodyWidth: bodyWidth,
-    bodyHeight: bodyHeight
-  };
-}

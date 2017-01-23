@@ -17,7 +17,7 @@ import { createStructuredSelector } from 'reselect';
 import { bindActionCreators } from 'redux';
 
 import Button from 'components/Button';
-import LoadingSplashscreen from 'components/LoadingSplashscreen';
+import LoadingScreen from 'components/LoadingScreen';
 import withProgressBar from 'components/ProgressBar';
 import FirebaseService from 'services/firebaseService';
 import * as globalSelectors from './selectors';
@@ -83,7 +83,7 @@ export class App extends React.PureComponent {
   render() {
     let body = null;
     if(this.state.loading) {
-      body = <LoadingSplashscreen />
+      body = <LoadingScreen loading={this.state.loading}/>
     } else {
       body = React.Children.toArray(this.props.children)
     }
@@ -119,10 +119,9 @@ App.propTypes = {
 
   /* Actions */
   changeRoute: React.PropTypes.func,
-  setNavOpen: React.PropTypes.func.isRequired,
 
   /* Selectors */
-  navOpen: React.PropTypes.bool.isRequired
+
 };
 
 function mapDispatchToProps(dispatch) {
@@ -132,7 +131,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const structuredSelector = createStructuredSelector({
-  navOpen: globalSelectors.selectNavOpen()
+
 });
 
 function mapStateToProps(state, ownProps) {

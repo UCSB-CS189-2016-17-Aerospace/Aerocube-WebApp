@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
 
-import LoadingCircle from '../LoadingCircle/LoadingCircle';
+import LoadingIndicator from 'components/LoadingIndicator';
 import messages from './messages';
 
 const BrightenFullScreenDiv = styled.div`
@@ -80,7 +80,7 @@ class LoadingScreen extends React.PureComponent { // eslint-disable-line react/p
         </p>
         <br/>
         <LoadingCircleWrapper>
-          <LoadingCircle/>
+          <LoadingIndicator/>
         </LoadingCircleWrapper>
       </BrightenFullScreenDiv>
     ) : null;

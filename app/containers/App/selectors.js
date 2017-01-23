@@ -6,9 +6,9 @@ import { createSelector } from 'reselect';
 
 const selectGlobal = (state) => state.get('global');
 
-export const selectNavOpen = () => createSelector(
+const selectNavOpen = () => createSelector(
   selectGlobal(),
-  (state) => state.navOpen
+  (state) => state.get('navOpen')
 );
 
 
@@ -29,6 +29,7 @@ const makeSelectLocationState = () => {
 };
 
 export {
+  selectGlobal,
   makeSelectLocationState,
   selectNavOpen
 };
