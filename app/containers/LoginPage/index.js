@@ -8,17 +8,89 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
-import { Button, FormControl } from 'react-bootstrap';
+import styled from 'styled-components';
 
 import * as loginSelectors from './selectors';
 import * as loginActions from './actions';
-import styles from './styles.css';
 
 import firebaseService from '../../services/firebaseService';
 import Alert from '../../components/Alert';
+import Button from 'components/Button';
+import * as cssConstants from 'constants/cssConstants';
+import { maxWidth, sm } from 'constants/cssQueries';
 
 import background from './pattern.png';
 
+const ArticleWrapper = styled.article`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background: url(${background}) repeat;
+  padding: 30px 0;
+`;
+
+const LoginForm = styled.form`
+  background: white;
+  margin: 2em 0;
+  padding: 3em 6em;
+  box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px rgba(0,0,0,.117647);
+  border-radius: 10px;
+  color: darkslategray;
+  width: 700px;
+  max-width: 90%;
+  animation: ${cssConstants.animations.fadeIn}
+  
+  @media(${maxWidth(sm)}) {
+    padding: 2em;
+  }
+`;
+
+const Input = styled.input`
+  font-size: 1.25em;
+  padding: 1em;
+  background-color: white;
+  border-radius: 2px;
+  border: 1px solid lightgrey;
+  box-shadow: 0 1px 3px rgba(0,0,0,.117647),0 1px 4px rgba(0,0,0,.117647);
+  display: block;
+  margin: 1em 0;
+  color: darkslategray;
+`;
+
+const PasswordRow = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+`;
+
+const EmailInput = styled(Input)`
+  width: 100%;
+`;
+
+const PasswordInput = styled(Input)`
+  padding-right: 4em;
+  flex-grow: 1;
+`;
+
+const ShowPasswordbutton = styled(Button)`
+  float: right;
+  margin: 1em 0;
+  flex-shrink: 0;
+  color: gray;
+  user-select: none;
+  cursor: pointer;
+  border: 1px solid lightgrey;
+  box-shadow: 0 1px 3px rgba(0,0,0,.117647),0 1px 4px rgba(0,0,0,.117647);
+  font-size: 1.25em;
+  padding: 1em;
+`;
 
 export class LoginPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -58,11 +130,9 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
   };
 
   render() {
-    let buttonStyles = [styles.loginButton, styles.blockButton];
-    buttonStyles.concat(styles.disabledButton);
 
     return (
-      <div className={styles.loginPage}>
+      <ArticleWrapper>
         <Helmet
           title="Login"
           meta={[
@@ -75,33 +145,33 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
                type={this.state.alertType}
                showHideButton
         />
-        <form onSubmit={(evt) => this.handleSubmit(evt)}
-              className={styles.loginForm}>
+        <LoginForm onSubmit={(evt) => this.handleSubmit(evt)}>
           <h1>
             Login
           </h1>
-          <FormControl type="email"
-                       placeholder="email"
-                       onChange={this.handleUpdateEmail}
+          <EmailInput type="email"
+                      placeholder="email"
+                      onChange={this.handleUpdateEmail}
           />
-          <FormControl type={this.state.showPassword ? 'text' : 'password'}
-                       className={styles.passwordInput}
-                       placeholder="password"
-                       onChange={this.handleUpdatePassword}
-          />
-          <span className={styles.showPasswordButton}
-                onClick={() => this.setState({showPassword: !this.state.showPassword})}>
-            { this.state.showPassword ? 'hide' : 'show' }
-          </span>
-          <Button className={buttonStyles.join(' ')}
-                  disabled={this.props.email.length == 0 || this.props.password.length == 0}
+          <PasswordRow>
+            <PasswordInput type={this.state.showPassword ? 'text' : 'password'}
+                   placeholder="password"
+                   onChange={this.handleUpdatePassword}
+            />
+            <ShowPasswordbutton onClick={() => this.setState({showPassword: !this.state.showPassword})}>
+              { this.state.showPassword ? 'hide' : 'show' }
+            </ShowPasswordbutton>
+          </PasswordRow>
+          <br/>
+          <Button disabled={this.props.email.length == 0 || this.props.password.length == 0}
+                  color={cssConstants.colors.primary}
                   type="submit"
                   onClick={this.props.handleSubmit}>
             Let's go!~
           </Button>
           <br/>
-        </form>
-      </div>
+        </LoginForm>
+      </ArticleWrapper>
     );
   }
 }

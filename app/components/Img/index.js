@@ -1,16 +1,39 @@
 /**
-*
-* Img
-*
-*/
+ *
+ * Img.react.js
+ *
+ * Renders an image, enforcing the usage of the alt="" tag
+ */
 
 import React from 'react';
 import LazyLoad from 'react-lazyload';
-import { CircularProgress } from 'material-ui';
+import styled from 'styled-components';
 
-require('./styles.css');
+import LoadingIndicator from '../LoadingIndicator';
 
-class Img extends React.Component {
+import * as css from '../../constants/cssConstants';
+
+export const SpinnerWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  flex-grow: 1;
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+`;
+
+export const FadeInImg = styled.img`
+  display: inline-flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  animation: ${css.animations.fadeIn};
+  max-width: 100%;
+`;
+
+class Img extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,23 +58,26 @@ class Img extends React.Component {
     }
   };
 
+
   render() {
     let self = this;
     let output = null;
+    let inner = null;
 
     if(!self.state.loaded) {
-      output = (
-        <div className={`img-spinnerWrapper ${self.props.spinnerWrapperClassName}`}
-             style={self.props.spinnerWrapperStyle}>
-          <CircularProgress style={self.props.spinnerStyle} />
-        </div>
+      inner = (
+        <SpinnerWrapper className={self.props.spinnerWrapperClassName}
+                        style={self.props.spinnerWrapperStyle}>
+          <LoadingIndicator />
+        </SpinnerWrapper>
       )
     } else {
-      output = (
-        <img className={`img ${self.props.className}`}
-             style={self.props.style}
-             src={self.props.src}
-             ref={(input) => { self.img = input }} />
+      inner = (
+        <FadeInImg className={self.props.className}
+                   style={self.props.style}
+                   src={self.props.src}
+                   alt={self.props.alt}
+                   ref={(input) => { self.img = input }} />
       );
     }
 
@@ -61,9 +87,11 @@ class Img extends React.Component {
                   height={self.props.lazyLoadHeight}
                   once={self.props.lazyLoadOnce}
                   placeholder={self.props.lazyLoadPlaceholder}>
-          { output }
+          { inner }
         </LazyLoad>
       )
+    } else {
+      output = inner;
     }
     return output;
   }
@@ -71,6 +99,7 @@ class Img extends React.Component {
 
 Img.propTypes = {
   src: React.PropTypes.string.isRequired,
+  alt: React.PropTypes.string.isRequired,
   lazyLoad: React.PropTypes.bool,
   lazyLoadOffset: React.PropTypes.number,
   lazyLoadPlaceholder: React.PropTypes.node,
@@ -80,7 +109,6 @@ Img.propTypes = {
   className: React.PropTypes.string,
   spinnerWrapperStyle: React.PropTypes.object,
   spinnerWrapperClassName: React.PropTypes.string,
-  spinnerStyle: React.PropTypes.object
 };
 
 Img.defaultProps = {
@@ -92,8 +120,7 @@ Img.defaultProps = {
   style: {},
   className: '',
   spinnerWrapperStyle: {},
-  spinnerWrapperClassName: '',
-  spinnerStyle: {}
+  spinnerWrapperClassName: ''
 };
 
 export default Img;

@@ -10,23 +10,47 @@
  */
 
 import React from 'react';
+import styled from 'styled-components';
 
-import styles from './styles.css';
 import background from './stardust.png';
+
+const WrappingArticle = styled.article`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.2);
+  background: url('./stardust.png') repeat;
+`;
+
+const Header = styled.h1`
+  font-weight: 500;
+  font-size: 4em;
+  color: whitesmoke;
+  text-align: center;
+`;
+
+const SubHeader = styled.div`
+  color: whitesmoke;
+  font-size: 1.5em;
+  font-weight: 300;
+`;
 
 export default class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   render() {
     return (
-      <article className={styles.article}
+      <WrappingArticle
                style={{background: `url(${background}) repeat`}}>
-        <h1 className={styles.header}>
+        <Header>
           Your Fire Nation
-        </h1>
-        <p className={styles.subHeader}>
+        </Header>
+        <SubHeader>
           Isn't this pretty?
-        </p>
-      </article>
+        </SubHeader>
+      </WrappingArticle>
     );
   }
 }

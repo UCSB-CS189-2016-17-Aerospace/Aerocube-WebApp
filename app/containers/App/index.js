@@ -4,44 +4,43 @@
  *
  * This component is the skeleton around the actual pages, and should only
  * contain code that should be seen on all pages. (e.g. navigation bar)
- *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
  */
 
 import React from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import Helmet from 'react-helmet';
+import styled from 'styled-components';
 
-import styles from './styles.css';
+import * as strings from '../../constants/strings';
 
-export default class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
-  constructor(props) {
-    super(props);
+import withProgressBar from 'components/ProgressBar';
 
-    this.muiTheme = getMuiTheme(baseTheme, {
-      palette: {
-        primary1Color: 'darkslategrey',
-        accent1Color: '#00cabb',
-        pickerHeaderColor: this.primary1Color
-      }
-    });
-  }
-  static propTypes = {
-    children: React.PropTypes.node,
-  };
+const AppWrapper = styled.div`
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 100%;
+`;
 
-  render() {
-    let self = this;
-    return (
-      <MuiThemeProvider muiTheme={ self.muiTheme }>
-        <div className={styles.container}>
-          {React.Children.toArray(this.props.children)}
-        </div>
-      </MuiThemeProvider>
-    );
-  }
+export function App(props) {
+  return (
+    <AppWrapper>
+      <Helmet
+        titleTemplate={`%s | ${strings.siteName}`}
+        defaultTitle={`${strings.siteName}`}
+        meta={[
+          { name: 'description', content: '' },
+        ]}
+      />
+      {React.Children.toArray(props.children)}
+    </AppWrapper>
+  );
 }
+
+App.propTypes = {
+  children: React.PropTypes.node,
+};
+
+export default withProgressBar(App);
