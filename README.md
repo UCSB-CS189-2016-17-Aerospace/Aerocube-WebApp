@@ -1,5 +1,7 @@
 # Aerocube-WebApp ![Travis CI Build Status](https://travis-ci.org/UCSB-CS189-2016-17-Aerospace/Aerocube-WebApp.svg?branch=master)
 
+[Travis CI Repo Page](https://travis-ci.org/UCSB-CS189-2016-17-Aerospace/Aerocube-WebApp/builds) 
+
 ## Getting Started
 
 ### Prerequisites
