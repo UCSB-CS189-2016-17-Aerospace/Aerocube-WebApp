@@ -71,7 +71,8 @@
       "test": {
         "plugins": [
           "transform-es2015-modules-commonjs",
-          "transform-decorators-legacy"
+          "transform-decorators-legacy",
+          "dynamic-import-node"
         ]
       }
     }
@@ -192,10 +193,10 @@
     ],
     "coverageThreshold": {
       "global": {
-        "statements": 60,
+        "statements": 50,
         "branches": 40,
-        "functions": 60,
-        "lines": 80
+        "functions": 50,
+        "lines": 70
       }
     },
     "moduleDirectories": [
@@ -251,6 +252,7 @@
     "babel-core": "6.18.2",
     "babel-eslint": "7.1.1",
     "babel-loader": "6.2.8",
+    "babel-plugin-dynamic-import-node": "1.0.0",
     "babel-plugin-react-intl": "2.2.0",
     "babel-plugin-react-transform": "2.0.2",
     "babel-plugin-transform-es2015-modules-commonjs": "6.18.0",

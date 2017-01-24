@@ -8,12 +8,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
+import { push } from 'react-router-redux';
 import styled from 'styled-components';
 
 import * as loginSelectors from './selectors';
 import * as loginActions from './actions';
 
-import firebaseService from '../../services/firebaseService';
+import FirebaseService from '../../services/firebaseService';
 import Alert from '../../components/Alert';
 import Button from 'components/Button';
 import * as cssConstants from 'constants/cssConstants';
@@ -103,6 +104,21 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
     }
   }
 
+  componentWillMount() {
+    FirebaseService.setAuthObserver(this.onAuthSuccess, this.onAuthRemoved);
+  }
+
+  onAuthSuccess = () => {
+    let self = this;
+    setTimeout(() => {
+      self.props.changeRoute('/upload');
+    }, 200);
+  };
+
+  onAuthRemoved = () => {
+
+  };
+
   handleSubmit = (evt) => {
     if(evt && evt.preventDefault) {
       evt.preventDefault();
@@ -111,14 +127,13 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
       message: 'We are attempting to log you in',
       header: 'Please wait',
       alertType: Alert.getInfoAlertType()
-    }, firebaseService.loginUser(this.props.email, this.props.password, (message, isSuccess, promise) => {
+    }, FirebaseService.loginUser(this.props.email, this.props.password, (message, isSuccess, promise) => {
       this.setState({
         message: message,
         header: isSuccess ? 'Success' : 'Error',
         alertType: isSuccess ? Alert.getSuccessAlertType() : Alert.getErrorAlertType()
       });
     }));
-
   };
 
   handleUpdateEmail = (evt) => {
@@ -177,10 +192,13 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
 }
 
 LoginPage.propTypes = {
-  email: React.PropTypes.string,
-  password: React.PropTypes.string,
-  updateEmail: React.PropTypes.func,
-  updatePassword: React.PropTypes.func
+  /* Selectors */
+  email: React.PropTypes.string.isRequired,
+  password: React.PropTypes.string.isRequired,
+  /* Actions */
+  updateEmail: React.PropTypes.func.isRequired,
+  updatePassword: React.PropTypes.func.isRequired,
+  changeRoute: React.PropTypes.func.isRequired
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -190,6 +208,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    changeRoute: (url) => dispatch(push(url)),
     updateEmail: (email) => dispatch(loginActions.updateEmail(email)),
     updatePassword: (password) => dispatch(loginActions.updatePassword(password))
   };

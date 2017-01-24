@@ -1,0 +1,78 @@
+
+.loginForm {
+  background: white;
+  margin: 2em 0;
+  padding: 3em 6em;
+  box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px rgba(0,0,0,.117647);
+  border-radius: 10px;
+  color: darkslategray;
+  width: 700px;
+  max-width: 90%;
+}
+
+.loginForm :global {
+  animation: flex-fade-in 500ms ease forwards!important;
+}
+
+@media (max-width: 767px) {
+  .loginForm {
+    padding: 2em;
+  }
+}
+
+input {
+  width: 100%;
+  font-size: 1.25em;
+  padding: 1em;
+  background-color: white;
+  border-radius: 2px;
+  border: 1px solid lightgrey;
+  box-shadow: 0 1px 3px rgba(0,0,0,.117647),0 1px 4px rgba(0,0,0,.117647);
+  display: block;
+  margin: 1em 0;
+  color: darkslategray;
+}
+
+.passwordInput {
+  padding-right: 4em;
+}
+
+.showPasswordButton {
+  float: right;
+  margin: -4em 1em 0 0;
+  color: gray;
+  user-select: none;
+  cursor: pointer;
+}
+
+.showPasswordButton:hover {
+  text-decoration: underline;
+  color: darkslateblue;
+}
+
+.loginButton {
+  padding: 1em;
+  font-size: 1.25em;
+  border-radius: 2px;
+  background-color: cadetblue;
+  box-shadow: 0 1px 3px rgba(0,0,0,.117647),0 1px 4px rgba(0,0,0,.117647);
+  display: block;
+  color: whitesmoke;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+}
+
+.loginButton:hover {
+  background-color: darkslategray;
+  transition: all 200ms ease-in-out;
+}
+
+.disabledButton {
+  color: lightgray;
+  cursor: not-allowed;
+}
+
+.blockButton {
+  width: 100%;
+}

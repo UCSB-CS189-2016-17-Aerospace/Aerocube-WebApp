@@ -10,16 +10,47 @@
   width: 100%;
 }
 
+.loadingWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 30px 10px;
+}
+
+.logoutText {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+  transition: all 200ms ease;
+  color: lightslategray;
+  user-select: none;
+}
+
+.logoutText:hover {
+  text-decoration: underline;
+}
+
+.logoutText :global {
+  animation: flex-fade-in 300ms forwards;
+}
+
 * {
   font-family: 'Work Sans', Helvetica, sans-serif;
 }
 
 html,
 body,
-body > div {
+body > div,
+body > div > div {
   display: flex;
   flex-direction: row;
-  min-height: 100%;
+  min-height: 100%!important;
+  height: 100%;
   width: 100%;
   overflow-x: hidden;
 }
