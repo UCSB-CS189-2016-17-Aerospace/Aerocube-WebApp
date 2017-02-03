@@ -16,7 +16,7 @@ import { push } from 'react-router-redux';
 import { createStructuredSelector } from 'reselect';
 import { bindActionCreators } from 'redux';
 
-import Button from 'components/Button';
+import A from 'components/A';
 import LoadingScreen from 'components/LoadingScreen';
 import withProgressBar from 'components/ProgressBar';
 import FirebaseService from 'services/firebaseService';
@@ -33,6 +33,14 @@ const AppWrapper = styled.div`
   flex-direction: column;
   flex-grow: 1;
   min-height: 100%;
+`;
+
+const LogoutA = styled(A)`
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin-right: 15px;
+  margin-top: 10px;
 `;
 
 export class App extends React.PureComponent {
@@ -91,11 +99,10 @@ export class App extends React.PureComponent {
     let logoutButton = null;
     if(this.state.auth && !this.state.loading) {
       logoutButton = (
-        <Button color={cssConstants.colors.primary}
-                targetRoute={'/'}
-                onClick={this.handleLogout}>
+        <LogoutA targetRoute={'/'}
+           onClick={this.handleLogout}>
           Logout
-        </Button>
+        </LogoutA>
       );
     }
     return (
