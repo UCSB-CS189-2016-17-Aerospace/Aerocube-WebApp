@@ -7636,6 +7636,14 @@ text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
+three-orthographic-trackball-controls@^79.0.1:
+  version "79.0.1"
+  resolved "https://registry.yarnpkg.com/three-orthographic-trackball-controls/-/three-orthographic-trackball-controls-79.0.1.tgz#a7610c47f75e2d5b5797c47f928a5d0b1e4b9b6b"
+
+three@0.79.0:
+  version "0.79.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.79.0.tgz#3af96fda47f68b7ab093c298dfa335fa45da0cf4"
+
 throat@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/throat/-/throat-3.0.0.tgz#e7c64c867cbb3845f10877642f7b60055b8ec0d6"
