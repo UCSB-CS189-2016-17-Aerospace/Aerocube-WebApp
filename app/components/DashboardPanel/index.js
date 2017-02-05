@@ -1,0 +1,90 @@
+/**
+*
+* DashboardPanel
+*
+*/
+
+import React from 'react';
+import styled from 'styled-components';
+
+import { FormattedMessage } from 'react-intl';
+import messages from './messages';
+
+import * as cssConstants from 'constants/cssConstants';
+import * as cssQueries from 'constants/cssQueries';
+
+
+const PanelWrapper = styled.div`
+  width: ${props => props.size == DashboardPanel.sm ? 'calc(50% - 37.5px)' : '100%'};
+  min-height: 200px;
+  box-shadow: ${cssConstants.lightShadow};
+  border-radius: 2px;
+  margin: ${props => props.size == DashboardPanel.sm ? '25px 0 0 25px' : '25px 25px 0 25px'};
+  padding: ${props => props.padded ? '25px' : 0};
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+  
+  @media(${cssQueries.maxWidth(cssQueries.sm)}) {
+    width: calc(100% - 50px);
+    margin: 25px 25px 0 25px;
+  }
+`;
+
+const PanelHeader = styled.h1`
+  font-weight: bold;
+  color: ${cssConstants.colors.text};
+`;
+
+const PanelHeaderWrapper = styled.div`
+  padding: 0 0 0 30px;
+`;
+
+class DashboardPanel extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <PanelWrapper size={this.props.size}
+                    style={this.props.style}
+                    padded={this.props.padded}>
+        {
+          this.props.title ? (
+              <PanelHeaderWrapper>
+                { React.isValidElement(this.props.title) ? this.props.title : <PanelHeader>{this.props.title}</PanelHeader>}
+              </PanelHeaderWrapper>
+            ) : null
+        }
+        { this.props.children }
+      </PanelWrapper>
+    );
+  }
+}
+
+DashboardPanel.sm = 'small';
+DashboardPanel.lg = 'large';
+
+DashboardPanel.propTypes = {
+  size: React.PropTypes.oneOf([
+    DashboardPanel.sm,
+    DashboardPanel.lg
+  ]),
+  style: React.PropTypes.object,
+  padded: React.PropTypes.bool,
+  title: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.node
+  ])
+};
+
+DashboardPanel.defaultProps = {
+  size: DashboardPanel.sm,
+  padded: true
+};
+
+export default DashboardPanel;

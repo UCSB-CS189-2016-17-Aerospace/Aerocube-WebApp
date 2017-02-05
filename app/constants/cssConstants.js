@@ -6,6 +6,8 @@ export const navbarHeight = 60;
 
 export const footerHeight = 35;
 
+export const leftNavWidth = 300;
+
 /** Color **/
 
 const primaryColor = '#623C65';

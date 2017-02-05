@@ -20,7 +20,7 @@ const config = (process.env.NODE_ENV !== 'production') ? {
 class FirebaseService  {
   constructor() {
     if (!FirebaseService.instance) {
-      firebase.initializeApp(config);
+      this.app = firebase.initializeApp(config);
       FirebaseService.instance = this;
     }
     return FirebaseService.instance;
@@ -114,6 +114,13 @@ class FirebaseService  {
   signOut = () => {
     return firebase.auth().signOut();
   };
+
+  getDatabase = () => {
+    return firebase.database(this.app);
+  };
+
+
+
 }
 
 const instance = new FirebaseService();

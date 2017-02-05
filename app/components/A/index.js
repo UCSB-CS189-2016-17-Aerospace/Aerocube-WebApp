@@ -25,12 +25,12 @@ import * as cssConstants from '../../constants/cssConstants';
 const LinkStyle = css`
   cursor: pointer;
   text-decoration: none;
-  color: ${cssConstants.colors.primary};
+  color: ${cssConstants.colors.text};
   transition: all 200ms ease-in-out;
   
   &:hover {
     text-decoration: none;
-    color: ${cssConstants.colors.textMuted};
+    color: ${cssConstants.colors.primary};
   }
   
   &:focus {
