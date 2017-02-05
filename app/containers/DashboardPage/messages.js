@@ -8,7 +8,7 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   header: {
     id: 'app.containers.DashboardPage.header',
-    defaultMessage: 'This is DashboardPage container !',
+    defaultMessage: 'Dashboard',
   },
   quaternionSimulationHeader: {
     id: 'app.containers.DashboardPage.quaternionSimulationHeader',

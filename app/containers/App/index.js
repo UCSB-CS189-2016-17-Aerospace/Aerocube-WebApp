@@ -114,7 +114,7 @@ export class App extends React.PureComponent {
     leftNavItems.push(handleAuthButton);
 
     return (
-      <AppWrapper>
+      <LeftNavLayout navChildren={leftNavItems}>
         <Helmet
           titleTemplate={`%s | ${strings.siteName}`}
           defaultTitle={`${strings.siteName}`}
@@ -122,10 +122,8 @@ export class App extends React.PureComponent {
             { name: 'description', content: '' },
           ]}
         />
-        <LeftNavLayout navChildren={leftNavItems}>
-          { body }
-        </LeftNavLayout>
-      </AppWrapper>
+        { body }
+      </LeftNavLayout>
     );
   }
 }

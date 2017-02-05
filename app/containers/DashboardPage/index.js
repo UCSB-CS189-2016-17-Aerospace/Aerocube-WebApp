@@ -10,6 +10,7 @@ import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components'
+import { VictoryLine, VictoryChart, VictoryAxis, VictoryPie } from 'victory';
 
 import DashboardPanel from 'components/DashboardPanel';
 import QuaternionDisplay from 'components/QuaternionDisplay';
@@ -30,6 +31,13 @@ const DashboardArticle = styled.article`
   flex-grow: 1;
 `;
 
+const DashboardHeader = styled.h1`
+  font-weight: bold;
+  padding-left: 30px;
+  font-size: 3em;
+  margin-bottom: 0.25em;
+`;
+
 export class DashboardPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
 
@@ -41,12 +49,19 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
             { name: 'description', content: 'Description of DashboardPage' },
           ]}
         />
+        <DashboardHeader>
+          <FormattedMessage {...messages.header} />
+        </DashboardHeader>
         <Row>
           <DashboardPanel>
-            <FormattedMessage {...messages.header} />
+            <VictoryChart>
+              <VictoryLine/>
+            </VictoryChart>
           </DashboardPanel>
           <DashboardPanel>
-            <FormattedMessage {...messages.header} />
+            <VictoryChart>
+              <VictoryPie/>
+            </VictoryChart>
           </DashboardPanel>
         </Row>
         <Row>

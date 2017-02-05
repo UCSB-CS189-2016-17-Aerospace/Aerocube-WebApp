@@ -17,6 +17,8 @@ import * as cssQueries from 'constants/cssQueries';
 const PanelWrapper = styled.div`
   width: ${props => props.size == DashboardPanel.sm ? 'calc(50% - 37.5px)' : '100%'};
   min-height: 200px;
+  height: auto;
+  max-height: 50vh;
   box-shadow: ${cssConstants.lightShadow};
   border-radius: 2px;
   margin: ${props => props.size == DashboardPanel.sm ? '25px 0 0 25px' : '25px 25px 0 25px'};

@@ -16,12 +16,16 @@ import * as cssConstants from 'constants/cssConstants';
 import A from 'components/A';
 
 const LeftNavSection = styled.section`
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: calc(100vw - ${cssConstants.leftNavWidth}px);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-content: flex-start;
   align-items: flex-start;
-  height: 100%;
   width: ${cssConstants.leftNavWidth}px;
   max-width: ${cssConstants.leftNavWidth}px;
   min-width: ${cssConstants.leftNavWidth}px;
