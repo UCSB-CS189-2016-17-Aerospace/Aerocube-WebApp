@@ -3,7 +3,9 @@ const firebase = require('firebase/app');
 const firebaseAuth = require('firebase/auth'); // This is a necessary import
 const firebaseDatabase = require('firebase/database');
 
-const config = (process.env.NODE_ENV !== 'production') ? {
+// TODO: Switch to Production on deployed versions eventually
+// process.env.NODE_ENV !== 'production'
+const config = (true) ? {
   apiKey: "AIzaSyC9IG_3k-6pISqS1HO82GPVqm4bOo_aVb0",
   authDomain: "yfn-aerospace-staging.firebaseapp.com",
   databaseURL: "https://yfn-aerospace-staging.firebaseio.com",

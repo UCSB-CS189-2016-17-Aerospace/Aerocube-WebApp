@@ -42,7 +42,7 @@ const PanelHeader = styled.h1`
 `;
 
 const PanelHeaderWrapper = styled.div`
-  padding: 0 0 0 30px;
+  padding: ${props => props.padded ? '0 0 0 30px' : '0 0 0 10px'};
 `;
 
 class DashboardPanel extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -57,7 +57,7 @@ class DashboardPanel extends React.PureComponent { // eslint-disable-line react/
                     padded={this.props.padded}>
         {
           this.props.title ? (
-              <PanelHeaderWrapper>
+              <PanelHeaderWrapper padded={!this.props.padded}>
                 { React.isValidElement(this.props.title) ? this.props.title : <PanelHeader>{this.props.title}</PanelHeader>}
               </PanelHeaderWrapper>
             ) : null

@@ -94,24 +94,22 @@ export class App extends React.PureComponent {
       body = React.Children.toArray(this.props.children)
     }
 
-    let handleAuthButton = (this.state.auth && !this.state.loading) ? (
-      <LeftNavElement targetRoute={'/'}
-                      key="0"
-                      onClick={this.handleLogout}>
-        Logout
-      </LeftNavElement>
+    let leftNavItems = (this.state.auth && !this.state.loading) ? (
+      [
+        <LeftNavElement key="1" targetRoute={'/upload'}>Upload</LeftNavElement>,
+        <LeftNavElement key="2" targetRoute={'/dashboard'}>Dashboard</LeftNavElement>,
+        <LeftNavElement targetRoute={'/'}
+                        key="0"
+                        onClick={this.handleLogout}>
+          Logout
+        </LeftNavElement>,
+      ]
     ) : (
       <LeftNavElement targetRoute={'/login'}
                       key="0">
         Login
       </LeftNavElement>
     );
-
-    let leftNavItems = [
-      <LeftNavElement key="1" targetRoute={'/upload'}>Upload</LeftNavElement>,
-      <LeftNavElement key="2" targetRoute={'/dashboard'}>Dashboard</LeftNavElement>
-    ];
-    leftNavItems.push(handleAuthButton);
 
     return (
       <LeftNavLayout navChildren={leftNavItems}>

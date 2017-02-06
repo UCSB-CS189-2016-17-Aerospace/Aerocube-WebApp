@@ -1,9 +1,9 @@
 
 import { fromJS } from 'immutable';
-import dashboardPageReducer from '../reducer';
+import dashboardPageReducer, {initialState} from '../reducer';
 
 describe('dashboardPageReducer', () => {
   it('returns the initial state', () => {
-    expect(dashboardPageReducer(undefined, {})).toEqual(fromJS({}));
+    expect(dashboardPageReducer(undefined, {})).toEqual(initialState);
   });
 });

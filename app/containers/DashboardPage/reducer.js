@@ -10,7 +10,7 @@ import {
   ADD_SCAN_DATA
 } from './constants';
 
-const initialState = fromJS({
+export const initialState = fromJS({
   corners: {},
   scans: [],
   markerIds: {},

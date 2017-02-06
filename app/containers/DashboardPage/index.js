@@ -51,23 +51,34 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
     super(props);
   }
 
-  componentDidMount() {
-    let ref = FirebaseService.getDatabase().ref().orderByChild("SCAN_ID").on("child_added", (snapshot) => {
-      const snapshotVals = snapshot.val();
-      this.props.addScanData(
-        snapshotVals.SCAN_ID,
-        snapshotVals.SCAN_CORNERS,
-        snapshotVals.SCAN_MARKER_IDS,
-        snapshotVals.SCAN_POSES
-      );
-      console.log(snapshot.val())
-    });
+  updateStoreCallback = (snapshot) => {
+    const snapshotVals = snapshot.val();
+    this.props.addScanData(
+      snapshotVals.SCAN_ID,
+      snapshotVals.SCAN_CORNERS,
+      snapshotVals.SCAN_MARKER_IDS,
+      snapshotVals.SCAN_POSES
+    );
+  };
+
+  componentWillMount() {
+    let ref = FirebaseService.getDatabase().ref().orderByChild("SCAN_ID").on("child_added", this.updateStoreCallback);
+  }
+
+  componentWillUnmount() {
+    FirebaseService.getDatabase().ref().off("child_added", this.updateStoreCallback);
   }
 
   render() {
     let lastScanId = this.props.scanIds[this.props.scanIds.length - 1];
     let lastQuaternion = this.props.poses[lastScanId];
     let quaternion = lastQuaternion ? THREE.Quaternion(lastQuaternion.x, lastQuaternion.y, lastQuaternion.z, lastQuaternion.w) : undefined;
+
+    let timeData = this.props.scanIds.map((id, index, array) => {
+      return { time: index + 1, markerIdCount: this.props.markerIds[id].length }
+    });
+
+    console.log(timeData);
 
     return (
       <DashboardArticle>
@@ -81,19 +92,7 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
           <FormattedMessage {...messages.header} />
         </DashboardHeader>
         <Row>
-          <DashboardPanel>
-            <VictoryChart>
-              <VictoryLine/>
-            </VictoryChart>
-          </DashboardPanel>
-          <DashboardPanel>
-            <VictoryChart>
-              <VictoryPie/>
-            </VictoryChart>
-          </DashboardPanel>
-        </Row>
-        <Row>
-          <DashboardPanel style={{height: 800}}
+          <DashboardPanel style={{height: 900}}
                           size={DashboardPanel.lg}
                           padded={false}
                           title={
@@ -106,7 +105,17 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
             <QuaternionDisplay quaternion={quaternion}/>
           </DashboardPanel>
         </Row>
-        <br/>
+        <Row>
+          <DashboardPanel title="MarkerIdCount over Time">
+            <VictoryChart>
+              <VictoryAxis dependentAxis orientation={'left'} tickValues={[0, 1, 2]}/>
+              <VictoryLine data={timeData} x="time" y="markerIdCount" />
+            </VictoryChart>
+          </DashboardPanel>
+          <DashboardPanel>
+            <VictoryPie/>
+          </DashboardPanel>
+        </Row>
       </DashboardArticle>
     );
   }
