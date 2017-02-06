@@ -56,15 +56,6 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     let meshGeometry = new THREE.BoxGeometry(1, 1, 1);
     let box = new THREE.Mesh(meshGeometry, meshMaterial);
     box.setRotationFromQuaternion(this.props.quaternion);
-    let lineGeometry = new THREE.Geometry();
-    let endVector = new THREE.Vector3(1, 1, 1);
-    endVector.applyQuaternion(this.props.quaternion);
-    lineGeometry.vertices.push(
-      new THREE.Vector3(0, 0, 0),
-      endVector
-    );
-    let lineMaterial = new THREE.LineBasicMaterial( { color: 0x000000 } );
-    let line = new THREE.Line( lineGeometry, lineMaterial );
     let light = new THREE.PointLight(0xf9f9f9, 3, 6, 2);
     light.position.set(-2, 2, 2);
     let backLight = new THREE.PointLight(0xf9f9f9, 2, 6, 2);
@@ -77,7 +68,6 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     this.scene.add(light);
     this.scene.add(backLight);
     this.scene.add(axisHelper);
-    this.scene.add(line);
   };
 
   webGLAnimate = () => {
@@ -140,7 +130,7 @@ QuaternionDisplay.propTypes = {
 };
 
 QuaternionDisplay.defaultProps = {
-  quaternion: new THREE.Quaternion( .2, .2, .2, 1)
+  quaternion: new THREE.Quaternion( -0.05984052433931416, 0.7461517576819129, -0.6480882557488663, -0.14020798449225447)
 };
 
 export default QuaternionDisplay;

@@ -41,7 +41,6 @@ class LeftNavLayout extends React.PureComponent { // eslint-disable-line react/p
         </LeftNav>
         <RightBodySection>
           { this.props.children }
-          <br/>
         </RightBodySection>
       </LayoutArticle>
     );
