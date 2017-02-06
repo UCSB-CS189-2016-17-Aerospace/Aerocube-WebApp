@@ -19,6 +19,7 @@ const StyledRow = styled.div`
   align-content: space-between;
   align-items: flex-start;
   width: 100%;
+  flex: 0 0 auto;
   
   @media(${cssQueries.maxWidth(cssQueries.sm)}) {
     flex-direction: column;

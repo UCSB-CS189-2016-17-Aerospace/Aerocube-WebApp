@@ -16,6 +16,10 @@ import LeftNavElement from 'components/LeftNavElement';
 const LayoutArticle = styled.article`
   display: flex;
   flex-direction: row;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 `;
 
 const RightBodySection = styled.section`
