@@ -8,6 +8,24 @@ import React from 'react';
 import styled, {css} from 'styled-components';
 import * as cssConstants from 'constants/cssConstants';
 
+const AlertFloatWrapper = styled.div`
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+  opacity: ${(props) => props.hiding ? 0 : 1};
+  transition: opacity 500ms ease-in-out;
+  flex-grow: 1;
+`;
+
 const AlertDiv = styled.div`
   padding: 1.5em 2em;
   margin: 0;
@@ -20,6 +38,8 @@ const AlertDiv = styled.div`
   overflow: hidden;
   flex-shrink: 0;
   flex-grow: 0;
+  opacity: ${(props) => props.hiding ? 0 : 1};
+  transition: opacity 500ms ease-in-out;
   animation: ${cssConstants.animations.fadeIn};
   
   ${(props) => {
@@ -82,7 +102,8 @@ class Alert extends React.Component { // eslint-disable-line react/prefer-statel
     super(props);
 
     this.state = {
-      show: props.show
+      show: props.show,
+      hiding: false
     }
   }
 
@@ -117,9 +138,18 @@ class Alert extends React.Component { // eslint-disable-line react/prefer-statel
   };
 
   handleHide = () => {
-    this.setState({
-      show: false
-    })
+    if(this.state.show && !this.state.hiding) {
+      this.setState({
+        hiding: true
+      }, () => {
+        setTimeout(() => {
+          this.setState({
+            show: false,
+            hiding: false
+          }, () => this.props.onHide())
+        }, 500);
+      });
+    }
   };
 
   render() {
@@ -136,14 +166,14 @@ class Alert extends React.Component { // eslint-disable-line react/prefer-statel
     }
     */
     this.handleHideAfter(this.props.hideAfter);
-    // Render normally
-    return (
+    let alert = (
       <AlertDiv className={this.props.className}
                 style={this.props.style}
                 type={this.props.type}
-                block={this.props.block}>
+                block={this.props.block}
+                hiding={this.state.hiding}>
         <AlertHeader className={this.props.headerClassName}
-            style={this.props.headerStyle}>
+                     style={this.props.headerStyle}>
           { this.props.header }
         </AlertHeader>
         <AlertMessage className={this.props.messageClassName}
@@ -152,20 +182,28 @@ class Alert extends React.Component { // eslint-disable-line react/prefer-statel
         </AlertMessage>
         {
           this.props.showHideButton && this.props.type != Alert.getErrorAlertType() ? (
-            <HideButton className={this.props.buttonClassName}
-                        style={this.props.buttonStyle}
-                        onClick={() => this.handleHide()}>
-              Hide Me!
-            </HideButton>
-          ) : null
+              <HideButton className={this.props.buttonClassName}
+                          style={this.props.buttonStyle}
+                          onClick={() => this.handleHide()}>
+                Hide Me!
+              </HideButton>
+            ) : null
         }
       </AlertDiv>
     );
+    // Render normally
+    return this.props.float ?(
+        <AlertFloatWrapper hiding={this.state.hiding}>
+          { alert }
+        </AlertFloatWrapper>
+      ) : alert
+    ;
   }
 }
 
 Alert.propTypes = {
   /* Styles */
+  float: React.PropTypes.bool,
   // Override styles of the outer div element
   style: React.PropTypes.object,
   // Override styles of the header h2 element
@@ -193,6 +231,7 @@ Alert.propTypes = {
   hideAfter: React.PropTypes.number,
   // The text of the alert
   showHideButton: React.PropTypes.bool,
+  onHide: React.PropTypes.func,
 
   /* Content */
   header: React.PropTypes.string.isRequired,
@@ -207,6 +246,7 @@ Alert.propTypes = {
 };
 
 Alert.defaultProps = {
+  float: false,
   style: {},
   headerStyle: {},
   messageStyle: {},
@@ -218,7 +258,8 @@ Alert.defaultProps = {
   block: false,
   useAlertOnMobile: false,
   hideAfter: 0,
-  showHideButton: false
+  showHideButton: false,
+  onHide: () => {}
 };
 
 export default Alert;
