@@ -7,6 +7,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import CopyToClipboard from 'react-copy-to-clipboard';
+const Scroll = require('react-scroll');
+const Element = Scroll.Element;
+const scroll = Scroll.scroller;
 
 import * as cssConstants from 'constants/cssConstants';
 
@@ -23,11 +26,12 @@ const LogSection = styled.section`
   flex-grow: 1;
   border-radius: 2px;
   box-shadow: ${cssConstants.lightShadow};
-  background: #0A0A0A;
+  background: #181818;
   color: white;
   font-size: 12px;
   line-height: 16px;
   font-family: monospace;
+  padding: 30px 0;
 `;
 
 const lineNumberWidth = 40;
@@ -52,9 +56,8 @@ const LogLineWrapper = styled.div`
   justify-content: flex-start;
   align-content: flex-start;
   align-items: flex-start;
-  padding: 3px 0;
+  padding: 3px 0 4px 0;
   cursor: pointer;
-  margin: ${props => props.isFirst ? '30px 0 0 0' : '0'};
   z-index: 3;
   transition: all 200ms ease-in-out;
   &:hover {
@@ -71,6 +74,7 @@ const LineNumber = styled.label`
   padding-right: 5px;
   font-size: inherit;
   line-height: inherit;
+  cursor: pointer;
   flex-shrink: 0;
   color: whitesmoke;
   z-index: 3;
@@ -102,9 +106,23 @@ class LogOutput extends React.PureComponent { // eslint-disable-line react/prefe
     if(nextProps.loading != this.state.loading) {
       this.setState({
         loading: nextProps.loading
+      }, () => {
+        if(!nextProps.loading) {
+          this.onLoad();
+        }
       });
     }
   }
+
+  onLoad = () => {
+    scroll.scrollTo(this.props.scrollToLine, {
+      duration: 400,
+      delay: 50,
+      smooth: true,
+      offset: -50,
+      isDynamic: true
+    })
+  };
 
   render() {
     let alert = this.state.alertMessage.length > 0 ? (
@@ -123,14 +141,16 @@ class LogOutput extends React.PureComponent { // eslint-disable-line react/prefe
       let shortenedString = lineString.match(/.{0,200}/g)[0] + ((lineString.length > 200) ? ' ...' : '');
       return (
         <CopyToClipboard text={lineString} key={index} onCopy={() => this.setState({alertMessage: shortenedString})}>
-          <LogLineWrapper isFirst={index == 0}>
-            <LineNumber>
-              { index + 1 }
-            </LineNumber>
-            <LineText>
-              { lineString }
-            </LineText>
-          </LogLineWrapper>
+          <Element name={`L${index + 1}`}>
+            <LogLineWrapper>
+              <LineNumber>
+                { index + 1 }
+              </LineNumber>
+              <LineText>
+                { lineString }
+              </LineText>
+            </LogLineWrapper>
+          </Element>
         </CopyToClipboard>
       )
     });
@@ -145,12 +165,14 @@ class LogOutput extends React.PureComponent { // eslint-disable-line react/prefe
 
 LogOutput.propTypes = {
   lines: React.PropTypes.arrayOf(React.PropTypes.string),
-  loading: React.PropTypes.bool
+  loading: React.PropTypes.bool,
+  scrollToLine: React.PropTypes.string
 };
 
 LogOutput.defaultProps = {
   lines: [''],
-  loading: true
+  loading: true,
+  scrollToLine: ''
 };
 
 export default LogOutput;
