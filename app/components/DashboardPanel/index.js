@@ -21,7 +21,7 @@ const PanelWrapper = styled.div`
   max-height: 50vh;
   box-shadow: ${cssConstants.lightShadow};
   border-radius: 2px;
-  margin: ${props => props.size == DashboardPanel.sm ? '25px 0 0 25px' : '25px 25px 0 25px'};
+  margin: ${props => props.size == DashboardPanel.sm ? '0 0 25px 25px' : '0 25px 25px 25px'};
   padding: ${props => props.padded ? '25px' : 0};
   background: white;
   display: flex;
