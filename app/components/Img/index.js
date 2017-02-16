@@ -46,6 +46,10 @@ class Img extends React.PureComponent {
     this.loadImage(this.props.src);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.loadImage(nextProps.src);
+  }
+
   loadImage = (src) => {
     if(!this.state.loaded) {
       let image = new Image();
