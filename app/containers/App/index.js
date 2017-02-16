@@ -19,9 +19,14 @@ import { bindActionCreators } from 'redux';
 import Button from 'components/Button';
 import LoadingScreen from 'components/LoadingScreen';
 import withProgressBar from 'components/ProgressBar';
+import LeftNavLayout from 'components/LeftNavLayout';
+import LeftNavElement from 'components/LeftNavElement';
+
 import FirebaseService from 'services/firebaseService';
+
 import * as globalSelectors from './selectors';
 import * as globalActions from './actions';
+
 import * as strings from 'constants/strings';
 import * as cssConstants from 'constants/cssConstants';
 
@@ -33,6 +38,7 @@ const AppWrapper = styled.div`
   flex-direction: column;
   flex-grow: 1;
   min-height: 100%;
+  height: 100%;
 `;
 
 export class App extends React.PureComponent {
@@ -88,18 +94,25 @@ export class App extends React.PureComponent {
       body = React.Children.toArray(this.props.children)
     }
 
-    let logoutButton = null;
-    if(this.state.auth && !this.state.loading) {
-      logoutButton = (
-        <Button color={cssConstants.colors.primary}
-                targetRoute={'/'}
-                onClick={this.handleLogout}>
+    let leftNavItems = (this.state.auth && !this.state.loading) ? (
+      [
+        <LeftNavElement key="1" targetRoute={'/upload'}>Upload</LeftNavElement>,
+        <LeftNavElement key="2" targetRoute={'/dashboard'}>Dashboard</LeftNavElement>,
+        <LeftNavElement targetRoute={'/'}
+                        key="0"
+                        onClick={this.handleLogout}>
           Logout
-        </Button>
-      );
-    }
+        </LeftNavElement>,
+      ]
+    ) : (
+      <LeftNavElement targetRoute={'/login'}
+                      key="0">
+        Login
+      </LeftNavElement>
+    );
+
     return (
-      <AppWrapper>
+      <LeftNavLayout navChildren={leftNavItems}>
         <Helmet
           titleTemplate={`%s | ${strings.siteName}`}
           defaultTitle={`${strings.siteName}`}
@@ -108,8 +121,7 @@ export class App extends React.PureComponent {
           ]}
         />
         { body }
-        { logoutButton }
-      </AppWrapper>
+      </LeftNavLayout>
     );
   }
 }

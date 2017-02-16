@@ -1,8 +1,12 @@
 
 const firebase = require('firebase/app');
 const firebaseAuth = require('firebase/auth'); // This is a necessary import
+const firebaseDatabase = require('firebase/database');
+const firebaseStorage = require('firebase/storage');
 
-const config = (process.env.NODE_ENV !== 'production') ? {
+// TODO: Switch to Production on deployed versions eventually
+// process.env.NODE_ENV !== 'production'
+const config = (true) ? {
   apiKey: "AIzaSyC9IG_3k-6pISqS1HO82GPVqm4bOo_aVb0",
   authDomain: "yfn-aerospace-staging.firebaseapp.com",
   databaseURL: "https://yfn-aerospace-staging.firebaseio.com",
@@ -20,7 +24,7 @@ const config = (process.env.NODE_ENV !== 'production') ? {
 class FirebaseService  {
   constructor() {
     if (!FirebaseService.instance) {
-      firebase.initializeApp(config);
+      this.app = firebase.initializeApp(config);
       FirebaseService.instance = this;
     }
     return FirebaseService.instance;
@@ -114,7 +118,17 @@ class FirebaseService  {
   signOut = () => {
     return firebase.auth().signOut();
   };
+
+  getDatabase = () => {
+    return firebase.database(this.app);
+  };
+
+  getStorage = () => {
+    return firebase.storage(this.app);
+  }
 }
+
+
 
 const instance = new FirebaseService();
 Object.freeze(instance);

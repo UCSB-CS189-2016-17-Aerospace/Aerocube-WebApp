@@ -39,10 +39,6 @@
   animation: flex-fade-in 300ms forwards;
 }
 
-* {
-  font-family: 'Work Sans', Helvetica, sans-serif;
-}
-
 html,
 body,
 body > div,
