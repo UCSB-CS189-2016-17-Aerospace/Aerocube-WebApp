@@ -60,8 +60,8 @@ class LogList extends React.PureComponent { // eslint-disable-line react/prefer-
   addLogKeys = (snapshot) => {
     let tempArray = [{ key: snapshot.key, time: Object.keys(snapshot.val())[0] }];
     this.setState((state) => ({
-      logKeys: tempArray.concat(state.logKeys)
-    }))
+      logKeys: tempArray.concat(state.logKeys).sort((a, b) => b.time - a.time)
+    }), () => console.log(this.state.logKeys))
   };
 
   openLog = (logKey) => {
