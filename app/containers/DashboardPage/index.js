@@ -72,8 +72,8 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
 
   componentWillMount() {
     let self = this;
-    let ref = FirebaseService.getDatabase().ref().orderByChild("SCAN_ID").limitToLast(3).on("child_added", this.updateStoreCallback);
-    FirebaseService.getDatabase().ref().orderByChild("SCAN_ID").limitToLast(1).once("value", (snapshot) => {
+    let ref = FirebaseService.getDatabase().ref('scans').orderByChild("SCAN_ID").limitToLast(3).on("child_added", this.updateStoreCallback);
+    FirebaseService.getDatabase().ref('scans').orderByChild("SCAN_ID").limitToLast(1).once("value", (snapshot) => {
       const snapshotVals = snapshot.val();
       console.log(snapshotVals);
       let urlPromise = FirebaseService.getStorage().ref(`image/${Object.keys(snapshotVals)[0]}.jpg`).getDownloadURL();
