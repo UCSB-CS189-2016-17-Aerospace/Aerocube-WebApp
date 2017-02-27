@@ -56,6 +56,7 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     let meshGeometry = new THREE.BoxGeometry(1, 1, 1);
     let box = new THREE.Mesh(meshGeometry, meshMaterial);
     box.setRotationFromQuaternion(this.props.quaternion);
+    console.log(this.props.quaternion);
     let light = new THREE.PointLight(0xf9f9f9, 3, 6, 2);
     light.position.set(-2, 2, 2);
     let backLight = new THREE.PointLight(0xf9f9f9, 2, 6, 2);

@@ -17,19 +17,11 @@ import Alert from 'components/Alert';
 
 const LogSection = styled.section`
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-content: flex-start;
-  align-items: flex-start;
-  flex-grow: 1;
   border-radius: 2px;
-  box-shadow: ${cssConstants.lightShadow};
   background: #181818;
   color: white;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 15px;
+  line-height: 18px;
   font-family: monospace;
   padding: 30px 0;
 `;
@@ -46,7 +38,7 @@ const LineNumbersWrapper = styled.div`
   flex-shrink: 0;
 `;
 
-const LogLineWrapper = styled.div`
+const LogLineWrapper = styled(Element)`
   font-family: monospace;
   color: white;
   font-size: inherit;
@@ -59,6 +51,7 @@ const LogLineWrapper = styled.div`
   padding: 3px 0 4px 0;
   cursor: pointer;
   z-index: 3;
+  width: 100%;
   transition: all 200ms ease-in-out;
   &:hover {
     background: darkslategray;
@@ -67,28 +60,29 @@ const LogLineWrapper = styled.div`
 `;
 
 const LineNumber = styled.label`
-  font-family: monospace;
+  font-family: ${cssConstants.monospaceFont};
   text-align: right;
   height: 100%;
   width: ${lineNumberWidth}px;
-  padding-right: 5px;
+  padding: 1px 5px 0 0;
   font-size: inherit;
   line-height: inherit;
   cursor: pointer;
   flex-shrink: 0;
-  color: whitesmoke;
+  color: ${cssConstants.colors.textLight};
   z-index: 3;
   transition: all 200ms ease-in-out;
 `;
 
 const LineText = styled.p`
-  font-family: monospace;
+  font-family: ${cssConstants.monospaceFont};
+  color: ${cssConstants.colors.textLight};
+  font-weight: 300;
   font-size: inherit;
   line-height: inherit;
   margin: 0;
-  padding: 0 30px 0 10px;
+  padding: 1px 30px 0 10px;
   width: 100%;
-  flex-grow: 1;
   z-index: 3;
   transition: all 200ms ease-in-out;
 `;
@@ -141,16 +135,14 @@ class LogOutput extends React.PureComponent { // eslint-disable-line react/prefe
       let shortenedString = lineString.match(/.{0,200}/g)[0] + ((lineString.length > 200) ? ' ...' : '');
       return (
         <CopyToClipboard text={lineString} key={index} onCopy={() => this.setState({alertMessage: shortenedString})}>
-          <Element name={`L${index + 1}`}>
-            <LogLineWrapper>
-              <LineNumber>
-                { index + 1 }
-              </LineNumber>
-              <LineText>
-                { lineString }
-              </LineText>
-            </LogLineWrapper>
-          </Element>
+          <LogLineWrapper name={`L${index + 1}`}>
+            <LineNumber>
+              { index + 1 }
+            </LineNumber>
+            <LineText>
+              { lineString }
+            </LineText>
+          </LogLineWrapper>
         </CopyToClipboard>
       )
     });

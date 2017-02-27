@@ -10,13 +10,13 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 
-import styles from './styles.css';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { createStructuredSelector } from 'reselect';
 import { bindActionCreators } from 'redux';
 
 import A from 'components/A';
+import Button from 'components/Button';
 import LoadingScreen from 'components/LoadingScreen';
 import withProgressBar from 'components/ProgressBar';
 import LeftNavLayout from 'components/LeftNavLayout';
@@ -123,9 +123,11 @@ export class App extends React.PureComponent {
       [
         <LeftNavElement key="1" targetRoute={'/upload'}>Upload</LeftNavElement>,
         <LeftNavElement key="2" targetRoute={'/dashboard'}>Dashboard</LeftNavElement>,
+        <LeftNavElement key="3" targetRoute={'/logs'}>Logs</LeftNavElement>,
         <LeftNavElement targetRoute={'/'}
                         key="0"
                         onClick={this.handleLogout}>
+          Logout
         </LeftNavElement>,
       ]
     ) : (

@@ -5,17 +5,19 @@ import * as cssConstants from './constants/cssConstants';
 injectGlobal`
   html,
   body {
+    display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
+    background: ${cssConstants.colors.lightBackground};
   }
 
   body {
-    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-    font-weight: 200;
+    font-family: ${cssConstants.bodyFont};
   }
 
   body.fontLoaded {
-    font-family: ${cssConstants.sansSerifFont};
+    font-family: ${cssConstants.bodyFont};
   }
 
   #app {
@@ -33,18 +35,35 @@ injectGlobal`
     }
   }
   
+  .app-content {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    padding: 0;
+    width: 100%;
+  }
+  
   article {
     width: 100%;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
   }
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  a {
+    font-family: ${cssConstants.headerFont}
+  ;
 
   p,
   label {
-    font-family: ${cssConstants.serifFont};
+    font-family: ${cssConstants.bodyFont};
     line-height: 1.5em;
-    font-weight: 200;
+    font-weight: ${cssConstants.weights.bodyThin};
   }
   
   h1,
@@ -96,5 +115,4 @@ injectGlobal`
   ::-webkit-scrollbar-thumb:window-inactive {
     background: lightgray;
   }
-
 `;

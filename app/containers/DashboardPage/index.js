@@ -16,6 +16,8 @@ import { VictoryLine, VictoryChart, VictoryAxis, VictoryScatter } from 'victory'
 import DashboardPanel from 'components/DashboardPanel';
 import QuaternionDisplay from 'components/QuaternionDisplay';
 import Row from 'components/Row';
+import Col from 'components/Col';
+import Grid from 'components/Grid';
 import Img from 'components/Img';
 
 import FirebaseService from 'services/firebaseService';
@@ -50,6 +52,10 @@ const DashboardSubheader = styled.p`
   width: 100%;
   text-align: right;
   padding-right: 30px;
+`;
+
+const PaddedRow = styled(Row)`
+  padding: 30px 0;
 `;
 
 export class DashboardPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -96,10 +102,18 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
     let lastScanId = this.props.scanIds[this.props.scanIds.length - 1];
     console.log(lastScanId);
     let date = new Date(0);
-    date.setUTCSeconds(1486341147);
+    date.setUTCSeconds(lastScanId);
     console.log(date);
     let lastQuaternion = this.props.poses[lastScanId];
-    let quaternion = lastQuaternion ? THREE.Quaternion(lastQuaternion.x, lastQuaternion.y, lastQuaternion.z, lastQuaternion.w) : undefined;
+    let quaternion = undefined;
+    try {
+      lastQuaternion = lastQuaternion[0];
+      console.log(lastQuaternion);
+      quaternion = new THREE.Quaternion(lastQuaternion.x, lastQuaternion.y, lastQuaternion.z, lastQuaternion.w);
+      console.log(quaternion);
+    } catch(e) {
+
+    }
 
     let timeData = this.props.scanIds.map((id, index, array) => {
       return { time: index + 1, markerIdCount: this.props.markerIds[id].length }
@@ -113,40 +127,51 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
             { name: 'description', content: 'Description of DashboardPage' },
           ]}
         />
-        <Row>
-          <DashboardHeader>
-            <FormattedMessage {...messages.header} />
-          </DashboardHeader>
-          <DashboardSubheader>
-            Last Scan: {`${date.toLocaleTimeString()} on ${date.toLocaleDateString()}`}
-          </DashboardSubheader>
-        </Row>
-        <Row>
-          <DashboardPanel title="Markers Detected" padded={false}>
-            <VictoryChart>
-              <VictoryAxis dependentAxis orientation={'left'} tickValues={[0, 1, 2]}/>
-              <VictoryScatter data={timeData} x="time" y="markerIdCount" />
-              <VictoryAxis tickValues={['2 scans ago', '1 scan ago', 'last scan']}/>
-            </VictoryChart>
-          </DashboardPanel>
-          <DashboardPanel title="Last Scanned Image" padded={false} style={{overflow: 'hidden'}}>
-            <Img src={this.state.lastScanImageUrl} alt="Last scanned image" />
-          </DashboardPanel>
-        </Row>
-        <Row>
-          <DashboardPanel style={{height: 900}}
-                          size={DashboardPanel.lg}
-                          padded={false}
-                          title={
-                            <h1>
-                              <b>
-                                <FormattedMessage {...messages.quaternionSimulationHeader}/>
-                              </b>
-                            </h1>
-                          }>
-            <QuaternionDisplay quaternion={quaternion}/>
-          </DashboardPanel>
-        </Row>
+        <Grid fluid>
+          <Row>
+            <Col xs={12}>
+              <DashboardHeader>
+                <FormattedMessage {...messages.header} />
+              </DashboardHeader>
+              <DashboardSubheader>
+                Last Scan: {`${date.toLocaleTimeString()} on ${date.toLocaleDateString()}`}
+              </DashboardSubheader>
+              <br/>
+            </Col>
+          </Row>
+          <PaddedRow>
+            <Col xs={12} md={6}>
+              <DashboardPanel title="Markers Detected" padded={false}>
+                <VictoryChart>
+                  <VictoryAxis dependentAxis orientation={'left'} tickValues={[0, 1, 2]}/>
+                  <VictoryScatter data={timeData} x="time" y="markerIdCount" />
+                  <VictoryAxis tickValues={['2 scans ago', '1 scan ago', 'last scan']}/>
+                </VictoryChart>
+              </DashboardPanel>
+            </Col>
+            <Col xs={12} md={6}>
+              <DashboardPanel title="Last Scanned Image" padded={false} style={{overflow: 'hidden'}}>
+                <Img src={this.state.lastScanImageUrl} alt="Last scanned image" spinnerWrapperStyle={{width: '100%'}} />
+              </DashboardPanel>
+            </Col>
+          </PaddedRow>
+          <Row>
+            <Col xs={12}>
+              <DashboardPanel style={{height: 900}}
+                              size={DashboardPanel.lg}
+                              padded={false}
+                              title={
+                                <h1>
+                                  <b>
+                                    <FormattedMessage {...messages.quaternionSimulationHeader}/>
+                                  </b>
+                                </h1>
+                              }>
+                <QuaternionDisplay quaternion={quaternion}/>
+              </DashboardPanel>
+            </Col>
+          </Row>
+        </Grid>
       </DashboardArticle>
     );
   }

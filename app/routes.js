@@ -86,6 +86,26 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      path: '/logs',
+      name: 'logPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/LogPage/reducer'),
+          System.import('containers/LogPage/sagas'),
+          System.import('containers/LogPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer(this.name, reducer.default);
+          injectSagas(sagas.default, this.name);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
