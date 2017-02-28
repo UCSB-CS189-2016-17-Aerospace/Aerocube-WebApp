@@ -38,13 +38,21 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     this.wrapper = null;
   }
 
+  addBox = (quaternion) => {
+    let meshMaterial = new THREE.MeshLambertMaterial( { color: 0xf9f9f9 } );
+    let meshGeometry = new THREE.BoxGeometry(1, 1, 1);
+    let box = new THREE.Mesh(meshGeometry, meshMaterial);
+    box.setRotationFromQuaternion(quaternion);
+    this.scene.add(box);
+  };
+
   webGLInit = () => {
     this.renderer = new THREE.WebGLRenderer();
     this.scene = new THREE.Scene();
     this.wrapper = document.getElementById(this.wrapperId);
     let width = this.wrapper.getBoundingClientRect().width;
     let height = this.wrapper.getBoundingClientRect().height;
-    this.camera = new THREE.PerspectiveCamera( 80, width/height, 0.1, 800 );
+    this.camera = new THREE.PerspectiveCamera(80, width/height, 0.1, 1200);
     this.camera.setFocalLength(29);
     this.camera.position.set(0, 0, 5);
     this.controls = new THREE.OrthographicTrackballControls(this.camera, this.wrapper);
@@ -52,11 +60,6 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     this.renderer.setSize(width, height);
     this.scene.background = new THREE.Color(0xffffff);
     this.wrapper.appendChild(this.renderer.domElement);
-    let meshMaterial = new THREE.MeshLambertMaterial( { color: 0xf9f9f9 } );
-    let meshGeometry = new THREE.BoxGeometry(1, 1, 1);
-    let box = new THREE.Mesh(meshGeometry, meshMaterial);
-    box.setRotationFromQuaternion(this.props.quaternion);
-    console.log(this.props.quaternion);
     let light = new THREE.PointLight(0xf9f9f9, 3, 6, 2);
     light.position.set(-2, 2, 2);
     let backLight = new THREE.PointLight(0xf9f9f9, 2, 6, 2);
@@ -65,10 +68,12 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     let gridXZ = new THREE.GridHelper(5, 5);
     gridXZ.position.set(0, 0, 0);
     this.scene.add(gridXZ);
-    this.scene.add(box);
     this.scene.add(light);
     this.scene.add(backLight);
     this.scene.add(axisHelper);
+    this.props.quaternions.forEach((quaternion) => {
+      this.addBox(quaternion);
+    })
   };
 
   webGLAnimate = () => {
@@ -103,14 +108,24 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     this.webGLStart();
   };
 
+  shouldComponentUpdate(nextProps) {
+    if(nextProps.quaternions.length != this.props.quaternions.length)
+      return true;
+    nextProps.quaternions.forEach((quaternion, index) => {
+      if(quaternion != this.props.quaternions[index]) {
+        return true;
+      }
+    })
+    return false;
+  }
+
   componentDidMount() {
     this.webGLStart();
     window.addEventListener('resize', this.webGLReset);
   }
 
   componentDidUpdate() {
-    this.webGLAnimate();
-    this.webGLRender();
+    this.webGLReset();
   }
 
   componentWillUnmount() {
@@ -127,11 +142,11 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
 }
 
 QuaternionDisplay.propTypes = {
-  quaternion: React.PropTypes.instanceOf(THREE.Quaternion)
+  quaternions: React.PropTypes.arrayOf(React.PropTypes.instanceOf(THREE.Quaternion))
 };
 
 QuaternionDisplay.defaultProps = {
-  quaternion: new THREE.Quaternion( -0.05984052433931416, 0.7461517576819129, -0.6480882557488663, -0.14020798449225447)
+  quaternions: [new THREE.Quaternion( -0.05984052433931416, 0.7461517576819129, -0.6480882557488663, -0.14020798449225447)]
 };
 
 export default QuaternionDisplay;

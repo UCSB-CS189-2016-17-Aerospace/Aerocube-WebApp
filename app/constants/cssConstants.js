@@ -6,7 +6,7 @@ export const navbarHeight = 60;
 
 export const footerHeight = 35;
 
-export const leftNavWidth = 300;
+export const leftNavWidth = 200;
 
 /** Color **/
 

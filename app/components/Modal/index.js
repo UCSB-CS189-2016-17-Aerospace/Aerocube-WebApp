@@ -67,6 +67,22 @@ class Modal extends React.PureComponent {
     });
   }
 
+  closeOnEscape = (event) => {
+    if ( event.keyCode == 27 ) {
+      this.setState({
+        open: false
+      })
+    }
+  };
+
+  componentWillMount() {
+    window.onkeydown = this.closeOnEscape
+  }
+
+  componentWillUnmount() {
+    window.onkeydown = null;
+  }
+
   render() {
     let title = this.props.title ? (
         <Title type={this.props.type}>

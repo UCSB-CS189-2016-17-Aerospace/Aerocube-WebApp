@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 /**
  * Direct selector to the dashboardPage state domain
  */
-const selectDashboardPageDomain = () => (state) => state.get('dashboardPage');
+export const selectDashboardPageDomain = () => (state) => state.get('dashboardPage');
 
 /**
  * Other specific selectors
@@ -14,37 +14,19 @@ const selectDashboardPageDomain = () => (state) => state.get('dashboardPage');
  * Default selector used by DashboardPage
  */
 
-const makeSelectDashboardPage = () => createSelector(
+export const makeSelectDashboardPage = () => createSelector(
   selectDashboardPageDomain(),
   (substate) => substate.toJS()
 );
 
-const makeSelectScanIds = () => createSelector(
+export const makeSelectScanIds = () => createSelector(
   makeSelectDashboardPage(),
-  (state) => state.scans
+  (state) => state.scanIds
 );
 
-const makeSelectScanCorners = (id=undefined) => createSelector(
+export const makeSelectMarkers = () => createSelector(
   makeSelectDashboardPage(),
-  (state) => id ? state.corners[id] : state.corners
+  (state) => state.markers
 );
-
-const makeSelectScanMarkerIds = (id=undefined) => createSelector(
-  makeSelectDashboardPage(),
-  (state) => id ? state.markerIds[id] : state.markerIds
-);
-
-const makeSelectScanPoses = (id=undefined) => createSelector(
-  makeSelectDashboardPage(),
-  (state) => id ? state.poses[id] : state.poses
-);
-
 
 export default makeSelectDashboardPage;
-export {
-  selectDashboardPageDomain,
-  makeSelectScanIds,
-  makeSelectScanCorners,
-  makeSelectScanMarkerIds,
-  makeSelectScanPoses
-};
