@@ -27,13 +27,21 @@ module.exports = (options) => ({
       // So, no need for ExtractTextPlugin here.
       test: /\.css$/,
       include: /node_modules/,
+      exclude: /flexboxgrid/,
       loaders: ['style-loader', 'css-loader'],
     }, {
       test: /\.css$/,
       exclude: /node_modules/,
       loaders: ['style-loader', 'css-loader?importLoaders=1!postcss-loader'],
     }, {
+      test: /\.css$/,
+      loader: 'style-loader!css?modules',
+      include: /flexboxgrid/,
+    }, {
       test: /\.(eot|svg|ttf|woff|woff2)$/,
+      loader: 'file-loader',
+    }, {
+      test: /\.md$/,
       loader: 'file-loader',
     }, {
       test: /\.(jpg|png|gif)$/,

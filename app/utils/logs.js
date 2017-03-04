@@ -36,7 +36,7 @@ export const writeToConsole = (level, logString) => {
       break;
     default:
       throw ErrorGenerator.generate(ErrorGenerator.types.error,
-        'logs.js',
+        'logKeys.js',
         'Logger',
         'log',
         'All Logger.levels cases should be handled explicitly.')
@@ -49,7 +49,7 @@ export const writeToConsole = (level, logString) => {
 export default class Logger {
   constructor() {
     throw ErrorGenerator.generate(ErrorGenerator.types.error,
-      'logs.js',
+      'logKeys.js',
       'Logger',
       'constructor',
       'Logger is Abstract, construction not allowed.'

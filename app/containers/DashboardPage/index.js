@@ -16,18 +16,16 @@ import { VictoryLine, VictoryChart, VictoryAxis, VictoryScatter } from 'victory'
 import DashboardPanel from 'components/DashboardPanel';
 import QuaternionDisplay from 'components/QuaternionDisplay';
 import Row from 'components/Row';
+import Col from 'components/Col';
+import Grid from 'components/Grid';
 import Img from 'components/Img';
 
 import FirebaseService from 'services/firebaseService';
 
-import makeSelectDashboardPage, {
-  makeSelectScanPoses,
-  makeSelectScanMarkerIds,
-  makeSelectScanCorners,
-  makeSelectScanIds
-} from './selectors';
+import makeSelectDashboardPage, * as selectors from './selectors';
 import messages from './messages';
 import { addScanData } from './actions';
+import { markersReactShape } from './reducer';
 
 const DashboardArticle = styled.article`
   width: 100%;
@@ -41,15 +39,18 @@ const DashboardArticle = styled.article`
 `;
 
 const DashboardHeader = styled.h1`
-  font-weight: bold;
-  padding-left: 30px;
   font-size: 3em;
+  margin-bottom: 0;
 `;
 
 const DashboardSubheader = styled.p`
   width: 100%;
   text-align: right;
-  padding-right: 30px;
+  margin: 0;
+`;
+
+const PaddedCol = styled(Col)`
+  padding: 0 0 15px 0;
 `;
 
 export class DashboardPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -63,10 +64,7 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
   updateStoreCallback = (snapshot) => {
     const snapshotVals = snapshot.val();
     this.props.addScanData(
-      snapshotVals.SCAN_ID,
-      snapshotVals.SCAN_CORNERS,
-      snapshotVals.SCAN_MARKER_IDS,
-      snapshotVals.SCAN_POSES
+      snapshotVals
     );
   };
 
@@ -75,10 +73,8 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
     let ref = FirebaseService.getDatabase().ref('scans').orderByChild("SCAN_ID").limitToLast(3).on("child_added", this.updateStoreCallback);
     FirebaseService.getDatabase().ref('scans').orderByChild("SCAN_ID").limitToLast(1).once("value", (snapshot) => {
       const snapshotVals = snapshot.val();
-      console.log(snapshotVals);
       let urlPromise = FirebaseService.getStorage().ref(`image/${Object.keys(snapshotVals)[0]}.jpg`).getDownloadURL();
       urlPromise.then((url) => {
-        console.log(url);
         self.setState({
           lastScanImageUrl: url
         })
@@ -93,16 +89,26 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
   }
 
   render() {
-    let lastScanId = this.props.scanIds[this.props.scanIds.length - 1];
-    console.log(lastScanId);
+    let lastScanId = this.props.scanIds[0];
     let date = new Date(0);
-    date.setUTCSeconds(1486341147);
-    console.log(date);
-    let lastQuaternion = this.props.poses[lastScanId];
-    let quaternion = lastQuaternion ? THREE.Quaternion(lastQuaternion.x, lastQuaternion.y, lastQuaternion.z, lastQuaternion.w) : undefined;
+    date.setUTCSeconds(lastScanId);
+    let quaternion = undefined;
+    try {
+      let markerUniqueIds = this.props.markerObjects[lastScanId]['markerUniqueIds'];
+      let lastMarkerId = markerUniqueIds[0];
+      let lastQuaternion = this.props.markerObjects[lastScanId]['quaternions'][lastMarkerId];
+      quaternion = new THREE.Quaternion(lastQuaternion.x, lastQuaternion.y, lastQuaternion.z, lastQuaternion.w);
+    } catch(e) {
 
-    let timeData = this.props.scanIds.map((id, index, array) => {
-      return { time: index + 1, markerIdCount: this.props.markerIds[id].length }
+    }
+
+    let timeData = this.props.scanIds.map((scanId, index) => {
+      let date = new Date();
+      date.setUTCSeconds(scanId);
+      return {
+        time: index + 1,
+        markerIdCount: Object.values(this.props.markerObjects[scanId].cubeIds).length
+      }
     });
 
     return (
@@ -113,40 +119,49 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
             { name: 'description', content: 'Description of DashboardPage' },
           ]}
         />
-        <Row>
-          <DashboardHeader>
-            <FormattedMessage {...messages.header} />
-          </DashboardHeader>
-          <DashboardSubheader>
-            Last Scan: {`${date.toLocaleTimeString()} on ${date.toLocaleDateString()}`}
-          </DashboardSubheader>
-        </Row>
-        <Row>
-          <DashboardPanel title="Markers Detected" padded={false}>
-            <VictoryChart>
-              <VictoryAxis dependentAxis orientation={'left'} tickValues={[0, 1, 2]}/>
-              <VictoryScatter data={timeData} x="time" y="markerIdCount" />
-              <VictoryAxis tickValues={['2 scans ago', '1 scan ago', 'last scan']}/>
-            </VictoryChart>
-          </DashboardPanel>
-          <DashboardPanel title="Last Scanned Image" padded={false} style={{overflow: 'hidden'}}>
-            <Img src={this.state.lastScanImageUrl} alt="Last scanned image" />
-          </DashboardPanel>
-        </Row>
-        <Row>
-          <DashboardPanel style={{height: 900}}
-                          size={DashboardPanel.lg}
-                          padded={false}
-                          title={
-                            <h1>
-                              <b>
-                                <FormattedMessage {...messages.quaternionSimulationHeader}/>
-                              </b>
-                            </h1>
-                          }>
-            <QuaternionDisplay quaternion={quaternion}/>
-          </DashboardPanel>
-        </Row>
+        <Grid fluid>
+          <Row>
+            <Col xs={12}>
+              <DashboardHeader>
+                <FormattedMessage {...messages.header} />
+              </DashboardHeader>
+              <DashboardSubheader>
+                Last Scan: {`${date.toLocaleTimeString()} on ${date.toLocaleDateString()}`}
+              </DashboardSubheader>
+              <br/>
+            </Col>
+          </Row>
+          <Row>
+            <PaddedCol xs={12} lg={6}>
+              <DashboardPanel title="Markers Detected" padded={false}>
+                <VictoryChart>
+                  <VictoryAxis dependentAxis orientation={'left'} tickFormat={tick => Number(tick)}/>
+                  <VictoryScatter data={timeData} x="time" y="markerIdCount" />
+                  <VictoryAxis tickValues={['3 scans ago', '2 scans ago', 'last scan']} />
+                </VictoryChart>
+              </DashboardPanel>
+            </PaddedCol>
+            <PaddedCol xs={12} lg={6}>
+              <DashboardPanel title="Last Scanned Image" padded={false} style={{overflow: 'hidden'}}>
+                <Img src={this.state.lastScanImageUrl} alt="Last scanned image" spinnerWrapperStyle={{width: '100%'}} />
+              </DashboardPanel>
+            </PaddedCol>
+          </Row>
+          <Row>
+            <PaddedCol xs={12}>
+              <DashboardPanel style={{height: 900}}
+                              size={DashboardPanel.lg}
+                              padded={false}
+                              title={
+                                <h1>
+                                  <FormattedMessage {...messages.quaternionSimulationHeader}/>
+                                </h1>
+                              }>
+                <QuaternionDisplay quaternion={quaternion}/>
+              </DashboardPanel>
+            </PaddedCol>
+          </Row>
+        </Grid>
       </DashboardArticle>
     );
   }
@@ -156,22 +171,17 @@ DashboardPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   addScanData: React.PropTypes.func.isRequired,
   scanIds: React.PropTypes.arrayOf(React.PropTypes.number),
-  markerIds: React.PropTypes.object,
-  corners: React.PropTypes.object,
-  poses: React.PropTypes.object
+  markerObjects: React.PropTypes.objectOf(markersReactShape)
 };
 
 const mapStateToProps = createStructuredSelector({
-  DashboardPage: makeSelectDashboardPage(),
-  scanIds: makeSelectScanIds(),
-  markerIds: makeSelectScanMarkerIds(),
-  poses: makeSelectScanPoses(),
-  corners: makeSelectScanCorners()
+  scanIds: selectors.makeSelectScanIds(),
+  markerObjects: selectors.makeSelectMarkers()
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    addScanData: (scanId, corners, markerIds, poses) => dispatch(addScanData(scanId, corners, markerIds, poses)),
+    addScanData: (scanVal) => dispatch(addScanData(scanVal)),
     dispatch,
   };
 }

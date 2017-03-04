@@ -15,13 +15,12 @@ import * as cssQueries from 'constants/cssQueries';
 
 
 const PanelWrapper = styled.div`
-  width: ${props => props.size == DashboardPanel.sm ? 'calc(50% - 37.5px)' : '100%'};
+  width: 100%;
   min-height: 200px;
-  height: auto;
+  height: 100%;
   max-height: 50vh;
   box-shadow: ${cssConstants.lightShadow};
   border-radius: 2px;
-  margin: ${props => props.size == DashboardPanel.sm ? '0 0 25px 25px' : '0 25px 25px 25px'};
   padding: ${props => props.padded ? '25px' : 0};
   background: white;
   display: flex;
@@ -29,11 +28,6 @@ const PanelWrapper = styled.div`
   justify-content: flex-start;
   align-content: flex-start;
   align-items: flex-start;
-  
-  @media(${cssQueries.maxWidth(cssQueries.sm)}) {
-    width: calc(100% - 50px);
-    margin: 25px 25px 0 25px;
-  }
 `;
 
 const PanelHeader = styled.h1`

@@ -30,6 +30,8 @@ const RightBodySection = styled.section`
   align-content: flex-start;
   align-items: flex-start;
   flex-grow: 1;
+  width: calc(100vw - ${cssConstants.leftNavWidth + 15}px);
+  max-width: calc(100vw - ${cssConstants.leftNavWidth + 15}px);
   margin-left: ${cssConstants.leftNavWidth}px;
   top: 0;
   right: 0;
