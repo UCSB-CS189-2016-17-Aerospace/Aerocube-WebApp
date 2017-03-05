@@ -126,6 +126,20 @@ class PageOverlay extends React.PureComponent { // eslint-disable-line react/pre
     document.body.style.overflowY = 'auto';
   };
 
+  closeOnEscape = (event) => {
+    if ( event.keyCode == 27 ) {
+      this.handleClose();
+    }
+  };
+
+  componentWillMount() {
+    window.onkeydown = this.closeOnEscape
+  }
+
+  componentWillUnmount() {
+    window.onkeydown = null;
+  }
+
   render() {
 
     let exitButton = this.props.showExitButton ? (
