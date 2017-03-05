@@ -13,6 +13,7 @@ import { xs, sm, md, lg } from 'constants/cssQueries';
 const StyledRow = styled(FlexboxRow)`
   && {
     margin: 0;
+    display: flex;
   }
 `;
 
