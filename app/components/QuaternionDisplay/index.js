@@ -26,6 +26,16 @@ const Wrapper = styled.div`
   }
 `;
 
+const meterToCmConversion = (meters) => meters * 100;
+
+const cube_x = meterToCmConversion(0.1);
+const cube_y = meterToCmConversion(0.17025);
+const cube_z = meterToCmConversion(0.1);
+
+const camera_x = 0;
+const camera_y = 15;
+const camera_z = 40;
+
 class QuaternionDisplay extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
   constructor(props) {
@@ -38,12 +48,14 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     this.wrapper = null;
   }
 
-  addBox = (quaternion) => {
+  addCube = (quaternion, x, y, z) => {
     let meshMaterial = new THREE.MeshLambertMaterial( { color: 0xf9f9f9 } );
-    let meshGeometry = new THREE.BoxGeometry(1, 1, 1);
-    let box = new THREE.Mesh(meshGeometry, meshMaterial);
-    box.setRotationFromQuaternion(quaternion);
-    this.scene.add(box);
+    let meshGeometry = new THREE.CubeGeometry(cube_x, cube_y, cube_z, 1, 1, 1);
+    let cube = new THREE.Mesh(meshGeometry, meshMaterial);
+    cube.setRotationFromQuaternion(quaternion);
+    // cube.position.set(meterToCmConversion(x) + camera_x, -1 * meterToCmConversion(y) + camera_y, -1 * meterToCmConversion(z) + camera_z);
+    cube.position.set(meterToCmConversion(x), meterToCmConversion(y), meterToCmConversion(z));
+    this.scene.add(cube);
   };
 
   webGLInit = () => {
@@ -52,28 +64,38 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     this.wrapper = document.getElementById(this.wrapperId);
     let width = this.wrapper.getBoundingClientRect().width;
     let height = this.wrapper.getBoundingClientRect().height;
-    this.camera = new THREE.PerspectiveCamera(80, width/height, 0.1, 1200);
+    this.camera = new THREE.PerspectiveCamera(80, width/height, 0.1, 2000);
     this.camera.setFocalLength(29);
-    this.camera.position.set(0, 0, 5);
+    this.camera.position.set(camera_x, camera_y, camera_z);
+    this.camera.lookAt(this.scene.position);
     this.controls = new THREE.OrthographicTrackballControls(this.camera, this.wrapper);
     this.controls.addEventListener('change', this.webGLRender);
     this.renderer.setSize(width, height);
     this.scene.background = new THREE.Color(0xffffff);
     this.wrapper.appendChild(this.renderer.domElement);
-    let light = new THREE.PointLight(0xf9f9f9, 3, 6, 2);
-    light.position.set(-2, 2, 2);
-    let backLight = new THREE.PointLight(0xf9f9f9, 2, 6, 2);
-    backLight.position.set(2, -2, -2);
-    let axisHelper = new THREE.AxisHelper(10);
-    let gridXZ = new THREE.GridHelper(5, 5);
+    let light = new THREE.PointLight(0xf9f9f9, 5, 500, 5);
+    light.position.set(0, 250, 100);
+    let frontLight = new THREE.PointLight(0xfafafa, 1, 500, 5);
+    light.position.set(0, -250, 50);
+    let ambientLight = new THREE.AmbientLight(0x111111);
+    let axisHelper = new THREE.AxisHelper(100);
+    let gridXZ = new THREE.GridHelper(100, 10);
     gridXZ.position.set(0, 0, 0);
     this.scene.add(gridXZ);
     this.scene.add(light);
-    this.scene.add(backLight);
+    this.scene.add(frontLight);
+    this.scene.add(ambientLight);
     this.scene.add(axisHelper);
-    this.props.quaternions.forEach((quaternion) => {
-      this.addBox(quaternion);
-    })
+    this.addCubes();
+  };
+
+  addCubes = () => {
+    this.props.cube_ids.forEach((cube_id) => {
+      let tvec = this.props.tvecs[cube_id];
+      let quaternionValues = this.props.quaternions[cube_id];
+      let quaternion = new THREE.Quaternion(quaternionValues.x, quaternionValues.y, quaternionValues.z, quaternionValues.w);
+      this.addCube(quaternion, tvec.x, tvec.y, tvec.z);
+    });
   };
 
   webGLAnimate = () => {
@@ -108,17 +130,6 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     this.webGLStart();
   };
 
-  shouldComponentUpdate(nextProps) {
-    if(nextProps.quaternions.length != this.props.quaternions.length)
-      return true;
-    nextProps.quaternions.forEach((quaternion, index) => {
-      if(quaternion != this.props.quaternions[index]) {
-        return true;
-      }
-    })
-    return false;
-  }
-
   componentDidMount() {
     this.webGLStart();
     window.addEventListener('resize', this.webGLReset);
@@ -142,11 +153,24 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
 }
 
 QuaternionDisplay.propTypes = {
-  quaternions: React.PropTypes.arrayOf(React.PropTypes.instanceOf(THREE.Quaternion))
+  quaternions: React.PropTypes.objectOf(React.PropTypes.shape({
+    x: React.PropTypes.number,
+    y: React.PropTypes.number,
+    z: React.PropTypes.number,
+    w: React.PropTypes.number
+  })),
+  tvecs: React.PropTypes.objectOf(React.PropTypes.shape({
+    x: React.PropTypes.number,
+    y: React.PropTypes.number,
+    z: React.PropTypes.number,
+  })),
+  cube_ids: React.PropTypes.arrayOf(React.PropTypes.number)
 };
 
 QuaternionDisplay.defaultProps = {
-  quaternions: [new THREE.Quaternion( -0.05984052433931416, 0.7461517576819129, -0.6480882557488663, -0.14020798449225447)]
+  quaternions: {},
+  tvecs: {},
+  cube_ids: []
 };
 
 export default QuaternionDisplay;

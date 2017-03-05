@@ -7,7 +7,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import * as THREE from 'three';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components'
@@ -68,40 +67,35 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
     );
   };
 
+  handleUpdateLastRenderedImage = (snapshot) => {
+    const snapshotVals = snapshot.val();
+    let promise = FirebaseService.getStorage().ref(`image/${snapshotVals['SCAN_ID']}.jpg`).getDownloadURL();
+    promise.then((url) => {
+      this.setState({
+        lastScanImageUrl: url
+      })
+    }, (err) => {
+      this.setState({
+        lastScanImageUrl: ''
+      })
+    });
+  };
+
   componentWillMount() {
     let self = this;
     let ref = FirebaseService.getDatabase().ref('scans').orderByChild("SCAN_ID").limitToLast(3).on("child_added", this.updateStoreCallback);
-    FirebaseService.getDatabase().ref('scans').orderByChild("SCAN_ID").limitToLast(1).once("value", (snapshot) => {
-      const snapshotVals = snapshot.val();
-      let urlPromise = FirebaseService.getStorage().ref(`image/${Object.keys(snapshotVals)[0]}.jpg`).getDownloadURL();
-      urlPromise.then((url) => {
-        self.setState({
-          lastScanImageUrl: url
-        })
-      }, (err) => {
-
-      });
-    });
+    FirebaseService.getDatabase().ref('scans').orderByChild("SCAN_ID").limitToLast(1).on("child_added", this.handleUpdateLastRenderedImage);
   }
 
   componentWillUnmount() {
-    FirebaseService.getDatabase().ref().off("child_added", this.updateStoreCallback);
+    FirebaseService.getDatabase().ref('scans').off("child_added", this.updateStoreCallback);
+    FirebaseService.getDatabase().ref('scans').off("child_added", this.handleUpdateLastRenderedImage);
   }
 
   render() {
     let lastScanId = this.props.scanIds[0];
     let date = new Date(0);
     date.setUTCSeconds(lastScanId);
-    let quaternion = undefined;
-    try {
-      let markerUniqueIds = this.props.markerObjects[lastScanId]['markerUniqueIds'];
-      let lastMarkerId = markerUniqueIds[0];
-      let lastQuaternion = this.props.markerObjects[lastScanId]['quaternions'][lastMarkerId];
-      quaternion = new THREE.Quaternion(lastQuaternion.x, lastQuaternion.y, lastQuaternion.z, lastQuaternion.w);
-    } catch(e) {
-
-    }
-
     let timeData = this.props.scanIds.map((scanId, index) => {
       let date = new Date();
       date.setUTCSeconds(scanId);
@@ -144,20 +138,6 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
             <PaddedCol xs={12} lg={6}>
               <DashboardPanel title="Last Scanned Image" padded={false} style={{overflow: 'hidden'}}>
                 <Img src={this.state.lastScanImageUrl} alt="Last scanned image" spinnerWrapperStyle={{width: '100%'}} />
-              </DashboardPanel>
-            </PaddedCol>
-          </Row>
-          <Row>
-            <PaddedCol xs={12}>
-              <DashboardPanel style={{height: 900}}
-                              size={DashboardPanel.lg}
-                              padded={false}
-                              title={
-                                <h1>
-                                  <FormattedMessage {...messages.quaternionSimulationHeader}/>
-                                </h1>
-                              }>
-                <QuaternionDisplay quaternion={quaternion}/>
               </DashboardPanel>
             </PaddedCol>
           </Row>
