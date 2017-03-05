@@ -86,7 +86,7 @@ class LogList extends React.PureComponent { // eslint-disable-line react/prefer-
   };
 
   componentWillMount() {
-    FirebaseService.getDatabase().ref(this.log_ref).orderByKey().limitToLast(20).on("child_added", this.addLogKeys);
+    FirebaseService.getDatabase().ref(this.log_ref).orderByKey().on("child_added", this.addLogKeys);
   }
 
   componentWillUnmount() {
