@@ -127,9 +127,14 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
           </Row>
           <Row>
             <PaddedCol xs={12} lg={6}>
-              <DashboardPanel title="Markers Detected" padded={false}>
+              <DashboardPanel title="Recent Marker Detections" padded={false}>
                 <VictoryChart>
-                  <VictoryAxis dependentAxis orientation={'left'} tickFormat={tick => Number(tick)}/>
+                  <VictoryAxis dependentAxis
+                               orientation={'left'}
+                               tickCount={8}
+                               domain={[0,8]}
+                               tickFormat={tick => Number(tick)} />
+                  <VictoryLine data={timeData} x="time" y="markerIdCount" />
                   <VictoryScatter data={timeData} x="time" y="markerIdCount" />
                   <VictoryAxis tickValues={['3 scans ago', '2 scans ago', 'last scan']} />
                 </VictoryChart>
