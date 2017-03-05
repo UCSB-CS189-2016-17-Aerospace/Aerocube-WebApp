@@ -11,12 +11,14 @@ import Dropzone from 'react-dropzone';
 const Scroll = require('react-scroll');
 const Element = Scroll.Element;
 const scroll = Scroll.scroller;
+import firebase from 'firebase';
 
 import selectUploadForm from './selectors';
 
 import Img from 'components/Img';
 import Alert from 'components/Alert';
 import APIClient from 'utils/apiUtils';
+import FirebaseService from 'services/firebaseService';
 
 import styles from './styles.css';
 
@@ -58,7 +60,7 @@ export class UploadForm extends React.Component { // eslint-disable-line react/p
           processingImage: false,
           alertHeader: 'Image Processed',
           alertMessage: 'Please check the preview to make sure you selected the correct image',
-          alertType: Alert.getSuccessAlertType(),
+          alertType: Alert.getInfoAlertType(),
           showAlert: true
         }, () => { // Scroll to location once processed
           scroll.scrollTo('UploadImg', {
@@ -103,37 +105,63 @@ export class UploadForm extends React.Component { // eslint-disable-line react/p
       alertType: Alert.getInfoAlertType(),
       showAlert: true
     }, () => {
-      let data = new FormData();
-      data.append('photo', self.state.img);
-      APIClient.post('uploadImage', data).then((response) => {
-        console.log(response);
-        console.log(response.data);
-        self.setState({
-          alertHeader: 'Success',
-          alertMessage: response.data['upload status'],
-          alertType: Alert.getSuccessAlertType(),
-          showAlert: true
-        }, () => scroll.scrollTo('UploadAlert', {
-          duration: 600,
-          delay: 200,
-          smooth: true,
-          isDynamic: true,
-          offset: -50
-        }));
-      }, (err) => {
-        self.setState({
-          alertHeader: 'Error',
-          alertMessage: err.message,
-          alertType: Alert.getErrorAlertType(),
-          showAlert: true
-        }, () => scroll.scrollTo('UploadAlert', {
-          duration: 600,
-          delay: 200,
-          smooth: true,
-          isDynamic: true,
-          offset: -50
-        }));
-      });
+      let newImageRef = FirebaseService.getStorage().ref().child(`uploads/${Date.now()}`);
+      let uploadTask = newImageRef.put(this.state.img, { contentType: 'image/jpeg' });
+      let observer = {
+        next: (snapshot) => {
+          let alertMessage = '';
+          switch(snapshot.state) {
+            case firebase.storage.TaskState.PAUSED:
+              alertMessage += 'Upload paused, ';
+              break;
+            case firebase.storage.TaskState.RUNNING:
+              alertMessage += 'Your image is uploading, ';
+              break;
+            default:
+              alertMessage += 'Your upload is ';
+          }
+          let progress = Math.trunc((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          alertMessage += `${progress}% complete.`;
+          self.setState({
+            alertHeader: 'Uploading',
+            alertMessage: alertMessage,
+            alertType: Alert.getInfoAlertType(),
+            showAlert: true
+          })
+        },
+        error: (error) => {
+          // Handle errors
+          self.setState({
+            alertHeader: 'Upload Failed',
+            alertMessage: `${self.state.img.name} failed to upload.`,
+            alertType: Alert.getErrorAlertType(),
+            showAlert: true
+          })
+        },
+        complete: () => {
+          // Handle completion
+          let downloadURL = uploadTask.snapshot.downloadURL;
+          console.log(downloadURL);
+          let uploadRef = FirebaseService.getDatabase().ref('uploads');
+          let writeThenable = uploadRef.set(downloadURL);
+          writeThenable.then(() => {
+            self.setState({
+              alertHeader: 'Successfully Uploaded',
+              alertMessage: `${self.state.img.name} has been successfully uploaded.`,
+              alertType: Alert.getSuccessAlertType(),
+              showAlert: true
+            });
+          }).catch((error) => {
+            self.setState({
+              alertHeader: 'Upload Failed',
+              alertMessage: `${self.state.img.name} could not be added to the database.`,
+              alertType: Alert.getErrorAlertType(),
+              showAlert: true
+            })
+          });
+        }
+      };
+      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, observer);
     });
   };
 
