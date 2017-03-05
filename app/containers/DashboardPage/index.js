@@ -67,10 +67,10 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
     );
   };
 
-  handleUpdateLastRenderedImage = (snapshot) => {
-    const snapshotVals = snapshot.val();
-    let promise = FirebaseService.getStorage().ref(`image/${snapshotVals['SCAN_ID']}.jpg`).getDownloadURL();
+  handleUpdateLastRenderedImage = (lastScanId) => {
+    let promise = FirebaseService.getStorage().ref(`image/${lastScanId}.jpg`).getDownloadURL();
     promise.then((url) => {
+      console.log(url);
       this.setState({
         lastScanImageUrl: url
       })
@@ -84,12 +84,14 @@ export class DashboardPage extends React.PureComponent { // eslint-disable-line 
   componentWillMount() {
     let self = this;
     let ref = FirebaseService.getDatabase().ref('scans').orderByChild("SCAN_ID").limitToLast(3).on("child_added", this.updateStoreCallback);
-    FirebaseService.getDatabase().ref('scans').orderByChild("SCAN_ID").limitToLast(1).on("child_added", this.handleUpdateLastRenderedImage);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.handleUpdateLastRenderedImage(nextProps.scanIds[nextProps.scanIds.length - 1]);
   }
 
   componentWillUnmount() {
     FirebaseService.getDatabase().ref('scans').off("child_added", this.updateStoreCallback);
-    FirebaseService.getDatabase().ref('scans').off("child_added", this.handleUpdateLastRenderedImage);
   }
 
   render() {
