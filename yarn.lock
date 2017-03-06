@@ -3172,7 +3172,7 @@ fined@^1.0.1:
     lodash.pick "^4.2.1"
     parse-filepath "^1.0.1"
 
-firebase@^3.7.0:
+firebase@3.7.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-3.7.0.tgz#a89a2af81f61eb5294b393e2f8d17066e3cd5eac"
   dependencies:
@@ -6756,6 +6756,12 @@ react-side-effect@1.0.2:
   resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-1.0.2.tgz#98e354decdbf0281e4223d87852d33e345eda561"
   dependencies:
     fbjs "0.1.0-alpha.10"
+
+react-table@^5.3.4:
+  version "5.3.4"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-5.3.4.tgz#1a824c76a292f6f9f182fb69d57a93a6bdeb9c06"
+  dependencies:
+    classnames "^2.2.5"
 
 react-transform-catch-errors@^1.0.2:
   version "1.0.2"

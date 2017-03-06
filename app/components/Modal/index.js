@@ -25,7 +25,6 @@ const ModalBody = styled.section`
   box-shadow: ${cssConstants.lightShadow};
   z-index: 801;
   overflow-y: auto;
-  max-height: 80vh;
   @media (${cssQueries.maxWidth(cssQueries.sm)}) {
   max-height: 90vh;
   }
@@ -76,11 +75,11 @@ class Modal extends React.PureComponent {
   };
 
   componentWillMount() {
-    window.onkeydown = this.closeOnEscape
+    document.addEventListener('keydown', this.closeOnEscape, false);
   }
 
   componentWillUnmount() {
-    window.onkeydown = null;
+    document.removeEventListener('keydown', this.closeOnEscape);
   }
 
   render() {

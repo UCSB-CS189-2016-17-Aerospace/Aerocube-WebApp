@@ -18,7 +18,7 @@ const PanelWrapper = styled.div`
   width: 100%;
   min-height: 200px;
   height: 100%;
-  max-height: 50vh;
+  max-height: 70vh;
   box-shadow: ${cssConstants.lightShadow};
   border-radius: 2px;
   padding: ${props => props.padded ? '25px' : 0};

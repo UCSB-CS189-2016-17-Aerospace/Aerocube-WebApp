@@ -36,7 +36,7 @@ function dashboardPageReducer(state = initialState, action) {
       return state;
     case ADD_SCAN_DATA:
       // Add scan ID
-      let newState = state.set('scanIds', state.get('scanIds').concat([Number(action.scanId)]).slice(-3));
+      let newState = state.set('scanIds', Array.from(new Set(state.get('scanIds').concat([Number(action.scanId)]))));
       // Add corners
       newState = newState.setIn(['markers', action.scanId], action.markers);
       return newState;

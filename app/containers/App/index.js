@@ -124,7 +124,6 @@ export class App extends React.PureComponent {
         <LeftNavElement key="1" targetRoute={'/upload'}>Upload</LeftNavElement>,
         <LeftNavElement key="2" targetRoute={'/dashboard'}>Dashboard</LeftNavElement>,
         <LeftNavElement key="3" targetRoute={'/logs'}>Logs</LeftNavElement>,
-        <LeftNavElement key="4" targetRoute={'/render'}>Rendering</LeftNavElement>,
         <LeftNavElement targetRoute={'/'}
                         key="0"
                         onClick={this.handleLogout}>

@@ -17,6 +17,10 @@ export function defaultAction() {
 
 export function addScanData(scanVal) {
   let scanMarkerObjects = scanVal.SCAN_MARKERS;
+  if(scanMarkerObjects === undefined)
+    return {
+      type: null
+    };
   let markerUniqueIds = scanMarkerObjects.map((markerObject) => {
     return `${markerObject.aerocubeFace} - ${markerObject.aerocubeID}`;
   });

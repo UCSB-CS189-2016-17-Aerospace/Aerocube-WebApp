@@ -133,11 +133,11 @@ class PageOverlay extends React.PureComponent { // eslint-disable-line react/pre
   };
 
   componentWillMount() {
-    window.onkeydown = this.closeOnEscape
+    document.addEventListener('keydown', this.closeOnEscape, false);
   }
 
   componentWillUnmount() {
-    window.onkeydown = null;
+    document.removeEventListener('keydown', this.closeOnEscape);
   }
 
   render() {
