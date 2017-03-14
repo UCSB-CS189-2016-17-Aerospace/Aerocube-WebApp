@@ -60,7 +60,7 @@ class LogList extends React.PureComponent { // eslint-disable-line react/prefer-
   addLogKeys = (snapshot) => {
     let tempArray = [{ key: snapshot.key, time: Object.keys(snapshot.val())[0] }];
     this.setState((state) => ({
-      logKeys: tempArray.concat(state.logKeys).sort((a, b) => b.time - a.time)
+      logKeys: tempArray.concat(state.logKeys).sort((a, b) => b.time - a.time).slice(0, 20)
     }))
   };
 
@@ -86,7 +86,7 @@ class LogList extends React.PureComponent { // eslint-disable-line react/prefer-
   };
 
   componentWillMount() {
-    FirebaseService.getDatabase().ref(this.log_ref).orderByKey().limitToLast(20).on("child_added", this.addLogKeys);
+    FirebaseService.getDatabase().ref(this.log_ref).orderByKey().on("child_added", this.addLogKeys);
   }
 
   componentWillUnmount() {

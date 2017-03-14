@@ -12,6 +12,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
 import * as cssConstants from 'constants/cssConstants';
+import * as cssQueries from 'constants/cssQueries';
 
 import A from 'components/A';
 
@@ -31,6 +32,7 @@ const LeftNavSection = styled.section`
   min-width: ${cssConstants.leftNavWidth}px;
   background: ${cssConstants.colors.darkBackground};
   flex-grow: 1;
+  flex-shrink: 0;
   border-right: 1px solid ${cssConstants.colors.primary};
   color: white;
   
@@ -39,6 +41,19 @@ const LeftNavSection = styled.section`
   
   & > *:hover {
     filter: brightness(95%);
+  }
+  @media(${cssQueries.maxWidth(cssQueries.sm)}) {
+    position: relative; 
+    top: none;
+    left: none;
+    bottom: none;
+    right: none;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    border-right: none;
+    flex-shrink: 0;
+    flex-grow: 0; 
   }
 `;
 

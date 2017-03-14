@@ -9,8 +9,10 @@ import styled from 'styled-components';
 import { Grid as FlexboxGrid } from 'react-flexbox-grid';
 
 export const StyledGrid = styled(FlexboxGrid)`
-  ${props => props.fluid ? 'margin: 0; padding: 0;' : ''}
-  max-width: 100%;
+  && {
+    ${props => props.fluid ? 'margin: 0; padding: 0;' : ''}
+    max-width: 100%;
+  }
 `;
 
 function Grid(props) {

@@ -33,8 +33,8 @@ const cube_y = meterToCmConversion(0.17025);
 const cube_z = meterToCmConversion(0.1);
 
 const camera_x = 0;
-const camera_y = 15;
-const camera_z = 40;
+const camera_y = 0;
+const camera_z = -40;
 
 class QuaternionDisplay extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
@@ -67,9 +67,12 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     this.camera = new THREE.PerspectiveCamera(80, width/height, 0.1, 2000);
     this.camera.setFocalLength(29);
     this.camera.position.set(camera_x, camera_y, camera_z);
-    this.camera.lookAt(this.scene.position);
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    this.camera.rotateZ(180 * Math.PI / 180);
+    /*
     this.controls = new THREE.OrthographicTrackballControls(this.camera, this.wrapper);
     this.controls.addEventListener('change', this.webGLRender);
+    */
     this.renderer.setSize(width, height);
     this.scene.background = new THREE.Color(0xffffff);
     this.wrapper.appendChild(this.renderer.domElement);
@@ -78,14 +81,16 @@ class QuaternionDisplay extends React.PureComponent { // eslint-disable-line rea
     let frontLight = new THREE.PointLight(0xfafafa, 1, 500, 5);
     light.position.set(0, -250, 50);
     let ambientLight = new THREE.AmbientLight(0x111111);
+    /*
     let axisHelper = new THREE.AxisHelper(100);
     let gridXZ = new THREE.GridHelper(100, 10);
     gridXZ.position.set(0, 0, 0);
-    this.scene.add(gridXZ);
+     this.scene.add(gridXZ);
+     this.scene.add(axisHelper);
+    */
     this.scene.add(light);
     this.scene.add(frontLight);
     this.scene.add(ambientLight);
-    this.scene.add(axisHelper);
     this.addCubes();
   };
 
