@@ -41,8 +41,8 @@ const LoginForm = styled.form`
   box-shadow: 0 1px 6px rgba(0,0,0,.117647),0 1px 4px rgba(0,0,0,.117647);
   border-radius: 10px;
   color: darkslategray;
-  width: 700px;
-  max-width: 90%;
+  width: 90%;
+  max-width: 700px;
   animation: ${cssConstants.animations.fadeIn}
   
   @media(${maxWidth(sm)}) {

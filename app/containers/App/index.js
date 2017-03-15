@@ -10,18 +10,23 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 
-import styles from './styles.css';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { createStructuredSelector } from 'reselect';
 import { bindActionCreators } from 'redux';
 
+import A from 'components/A';
 import Button from 'components/Button';
 import LoadingScreen from 'components/LoadingScreen';
 import withProgressBar from 'components/ProgressBar';
+import LeftNavLayout from 'components/LeftNavLayout';
+import LeftNavElement from 'components/LeftNavElement';
+
 import FirebaseService from 'services/firebaseService';
+
 import * as globalSelectors from './selectors';
 import * as globalActions from './actions';
+
 import * as strings from 'constants/strings';
 import * as cssConstants from 'constants/cssConstants';
 
@@ -33,6 +38,22 @@ const AppWrapper = styled.div`
   flex-direction: column;
   flex-grow: 1;
   min-height: 100%;
+  height: 100%;
+`;
+
+const LogoutButton = styled(A)`
+  color: ${cssConstants.colors.textMuted};
+  position: fixed;
+  top: 0;
+  right: 0;
+  text-align: right;
+  z-index: 5;
+  padding: 5px;
+  transition: all 200ms ease-in-out;
+  
+  &:hover {
+    
+  }
 `;
 
 export class App extends React.PureComponent {
@@ -98,8 +119,26 @@ export class App extends React.PureComponent {
         </Button>
       );
     }
+    let leftNavItems = (this.state.auth && !this.state.loading) ? (
+      [
+        <LeftNavElement key="1" targetRoute={'/upload'}>Upload</LeftNavElement>,
+        <LeftNavElement key="2" targetRoute={'/dashboard'}>Dashboard</LeftNavElement>,
+        <LeftNavElement key="3" targetRoute={'/logs'}>Logs</LeftNavElement>,
+        <LeftNavElement targetRoute={'/'}
+                        key="0"
+                        onClick={this.handleLogout}>
+          Logout
+        </LeftNavElement>,
+      ]
+    ) : (
+      <LeftNavElement targetRoute={'/login'}
+                      key="0">
+        Login
+      </LeftNavElement>
+    );
+
     return (
-      <AppWrapper>
+      <LeftNavLayout navChildren={leftNavItems}>
         <Helmet
           titleTemplate={`%s | ${strings.siteName}`}
           defaultTitle={`${strings.siteName}`}
@@ -108,8 +147,7 @@ export class App extends React.PureComponent {
           ]}
         />
         { body }
-        { logoutButton }
-      </AppWrapper>
+      </LeftNavLayout>
     );
   }
 }

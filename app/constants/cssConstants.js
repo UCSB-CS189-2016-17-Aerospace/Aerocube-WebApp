@@ -6,6 +6,8 @@ export const navbarHeight = 60;
 
 export const footerHeight = 35;
 
+export const leftNavWidth = 200;
+
 /** Color **/
 
 const primaryColor = '#623C65';
@@ -24,7 +26,7 @@ const textColor = 'darkslategray';
 
 const textMutedColor = 'lightgray';
 
-const textLightColor = 'whitesmoke';
+const textLightColor = 'white';
 
 export const colors = {
   primary: primaryColor,
@@ -63,9 +65,16 @@ export const weights = {
 
 /** Fonts **/
 
-export const serifFont = `'Merriweather', Georgia, Times, 'Times New Roman', serif`;
+export const serifFont = `'Lora', Georgia, Times, 'Times New Roman', serif`;
 
-export const sansSerifFont = `'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif`;
+export const sansSerifFont = `'Catamaran', 'Helvetica Neue', Helvetica, Arial, sans-serif`;
+
+export const monospaceFont = `'Source Code Pro', monospace`;
+
+export const bodyFont = serifFont;
+
+export const headerFont = sansSerifFont;
+
 
 /** Misc **/
 
