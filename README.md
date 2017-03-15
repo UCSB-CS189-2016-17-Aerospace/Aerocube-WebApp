@@ -6,7 +6,7 @@
 
 ### File Structure
 ```
-app - application files
+/app - application files
 |  /components - react components that are not redux store connected
 |  /constants - javascript files containing constants
 |  /containers - react components that are redux store connected and pages that are not redux store connected
