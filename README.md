@@ -5,28 +5,25 @@
 ## Getting Started
 
 ### File Structure
-
+```
 app - application files
-* /components - react components that are not redux store connected
-* /constants - javascript files containing constants
-* /containers - react components that are redux store connected and pages that are not redux store connected
-* /services - data fetching services
-* /tests - tests for basic infrastructure files outside of other folders
-* /translations - basic framework for multi-language support
-* /utils - utilities
-* app.js - handles outermost component hierarchy and structural implmentation of routing, redux store and saga flows, etc.
-* global-styles.js - globally applied styles
-* index.html - entrypoint to application, only HTML file
-* reducers - infrastructure for redux reducers
-* routes - infrastructure for route definitions and implementation
-* store - infrastructure for redux store implementation
-
-docs - legacy documentation from mxstbr/react-boilerplate
-
-internals - structural implmentation for build tools, generator functions, etc. 
-
-server - implementation of the local development server and hot-reloading 
-
+|  /components - react components that are not redux store connected
+|  /constants - javascript files containing constants
+|  /containers - react components that are redux store connected and pages that are not redux store connected
+|  /services - data fetching services
+|  /tests - tests for basic infrastructure files outside of other folders
+|  /translations - basic framework for multi-language support
+|  /utils - utilities
+|  app.js - handles outermost component hierarchy and structural implmentation of routing, redux store and saga flows, etc.
+|  global-styles.js - globally applied styles
+|  index.html - entrypoint to application, only HTML file
+|  reducers - infrastructure for redux reducers
+|  routes - infrastructure for route definitions and implementation
+|  store - infrastructure for redux store implementation
+/docs -- legacy documentation from mxstbr/react-boilerplate
+/internals -- structural implmentation for build tools, generator functions, etc. 
+/server -- implementation of the local development server and hot-reloading 
+```
 
 ### Prerequisites
 1. Install Node 6.x.x (Latest version) and add to path (you may need to reboot for it to take effect, also installing node added it to my path AT)
